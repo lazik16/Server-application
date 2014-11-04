@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/D:/Work/GitHub/Projects/Web-Sockets-Server/TestEJB/src/java/server/HelloBean.java</file>
+            <file>file:/D:/Work/GitHub/Projects/Web-Sockets-Server/TestEJB/src/java/model/UserDAOLocal.java</file>
+            <file>file:/D:/Work/GitHub/Projects/Web-Sockets-Server/TestEJB/src/conf/persistence.xml</file>
+            <file>file:/D:/Work/GitHub/Projects/Web-Sockets-Server/TestEJB/src/java/servlets/HelloServlet.java</file>
+            <file>file:/D:/Work/GitHub/Projects/Web-Sockets-Server/TestEJB/web/WEB-INF/web.xml</file>
+            <file>file:/D:/Work/GitHub/Projects/Web-Sockets-Server/TestEJB/web/WEB-INF/beans.xml</file>
+            <file>file:/D:/Work/GitHub/Projects/Web-Sockets-Server/TestEJB/src/java/websockets/EchoEndpoint.java</file>
+            <file>file:/D:/Work/GitHub/Projects/Web-Sockets-Server/TestEJB/web/userInfo.jsp</file>
+            <file>file:/D:/Work/GitHub/Projects/Web-Sockets-Server/TestEJB/web/index.jsp</file>
+            <file>file:/D:/Work/GitHub/Projects/Web-Sockets-Server/TestEJB/src/java/model/UserDAO.java</file>
+        </group>
+    </open-files>
+</project-private>
