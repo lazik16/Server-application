@@ -9,38 +9,44 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <h:outputStylesheet name="./css/default.css"/>
         <h:outputStylesheet name="./css/cssLayout.css"/>
-        <title>Facelets Template</title>
+        <title>Apsync@</title> 
+        <ui:insert name="script"></ui:insert>
     </h:head>
 
     <h:body>
 
         <div id="top">
-            <h:form>
-                <ui:insert name="top">
-                    <table>
-                        <tr>
-                            <td>
-                                <h:link value="Home" outcome="index" />
-                            </td>
-                            <td>
-                                <h:link value="Users" outcome="listUsers" />
-                            </td>
-                            <td>
-                                <h:outputLink value="https://github.com/ROPR-A"
-                                              styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
-                                    <span class="ui-button-text">GitHub</span>
-                                </h:outputLink>
-                            </td>
-                            <td>
-                                <h:outputLink value="http://wiki.weproka.cz"
-                                              styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
-                                <span class="ui-button-text">Wiki</span>
-                                </h:outputLink>
-                            </td>
-                        </tr>
-                    </table>
-                </ui:insert>
-            </h:form>
+            <div id="topText">
+                <h:form>
+                    <ui:insert name="top">
+                        <table>
+                            <tr>
+                                <td>
+                                    <h:link value="Home" outcome="index" />
+                                </td>
+                                <td>
+                                    <h:link value="Users" outcome="listUsers" />
+                                </td>
+                                <td>
+                                    <h:outputLink value="https://github.com/ROPR-A"
+                                                  styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
+                                        <span class="ui-button-text">GitHub</span>
+                                    </h:outputLink>
+                                </td>
+                                <td>
+                                    <h:outputLink value="http://wiki.weproka.cz"
+                                                  styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
+                                        <span class="ui-button-text">Wiki</span>
+                                    </h:outputLink>
+                                </td>
+                                <td>
+                                    <h:link value="WebSocketAPI" outcome="webSocketClient" />
+                                </td>
+                            </tr>
+                        </table>
+                    </ui:insert>
+                </h:form>
+            </div>
         </div>
 
         <div id="content" class="center_content">
@@ -48,7 +54,11 @@
         </div>
 
         <div id="bottom">
-            <ui:insert name="bottom">Powered by NetBeans 8.0 &amp; Wildfly 8.1.0 Final</ui:insert>
+            <ui:insert name="bottom">
+                <div id="bottomText">
+                    Powered by NetBeans 8.0 &amp; Wildfly 8.1.0 Final 
+                </div>
+            </ui:insert>
         </div>
 
     </h:body>

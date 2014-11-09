@@ -16,7 +16,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import model.User;
 import model.UserDAOLocal;
-//import org.jboss.logging.Logger;
 
 @ServerEndpoint("/echo")
 @Stateless
@@ -52,13 +51,14 @@ public class EchoEndpoint {
             User u = new User();
             u.setUserName(name);
             userDao.addUser(u);
-            return "User -" + u.getUserName() + "- added, proceed to >> http://" + address + ":8080/HelloServlet";
+            return "User "+ u.getUserName() +" added";
         }
     }
 
     @OnOpen
     public void open(Session session) {
         System.out.println(("Open session:" + session.getId()));
+        /*
         final Session s = session;
         mes.execute(new Runnable() {
             @Override
@@ -73,6 +73,7 @@ public class EchoEndpoint {
                 }
             }
         });
+        */
     }
 
     @OnClose

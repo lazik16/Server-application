@@ -5,6 +5,9 @@
     color: white;
     padding: 5px;
     margin: 0px 0px 10px 0px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
 }
 
 #bottom {
@@ -12,6 +15,13 @@
     background-color: #c2dfef;
     padding: 5px;
     margin: 10px 0px 0px 0px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+}
+
+#bottomText{
+    text-align: center;
 }
 
 #left {
@@ -32,6 +42,10 @@
     position: relative;
     background-color: #dddddd;
     padding: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+    min-height: 300px;
 }
 
 .left_content {
