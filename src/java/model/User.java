@@ -29,7 +29,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
     @NamedQuery(name = "User.findByIdUser", query = "SELECT u FROM User u WHERE u.idUser = :idUser"),
     @NamedQuery(name = "User.findByUserName", query = "SELECT u FROM User u WHERE u.userName = :userName")})
-public class User implements Serializable {
+
+public class User implements Serializable, Comparable<User> {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -72,7 +73,6 @@ public class User implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof User)) {
             return false;
         }
@@ -86,6 +86,12 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "model.User[ idUser=" + idUser + " ]";
+    }
+
+    @Override
+    public int compareTo(User o) {
+        int compareId = o.getIdUser();
+        return compareId - idUser;
     }
     
 }

@@ -13,7 +13,8 @@
                 <f:view>
                     <h:form>
                         <h1><h:outputText value="Users"/></h1>
-                        <h:dataTable value="#{usersBean.users}" var="item">
+                        <h:commandButton value="Delete all" action="#{usersBean.deleteUsers()}"/>
+                        <h:dataTable border="1" value="#{usersBean.users}" var="item">
                             <h:column>
                                 <f:facet name="header">
                                     <h:outputText value="ID"/>
@@ -26,6 +27,14 @@
                                     <h:outputText value="Username"/>
                                 </f:facet>
                                 <h:outputText value="#{item.userName}"/>
+                            </h:column>
+                            
+                            <h:column>
+                                <h:commandButton value="Edit" action="#{usersBean.editUser(item.idUser)}"/>
+                            </h:column>
+                            
+                            <h:column>
+                                <h:commandButton value="Delete" action="#{usersBean.deleteUser(item.idUser)}"/>
                             </h:column>
                         </h:dataTable>
                     </h:form>

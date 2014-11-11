@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-var wsUri = "ws://apsync.duckdns.org:8080/echo";
+var wsUri = "ws://apsync.duckdns.org/echo";
 var output;
 var message;
 

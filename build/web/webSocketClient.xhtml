@@ -10,16 +10,16 @@
             <h1>WebSockets API</h1>
             <div>
                 <p>
-                Tato stránka slouží ke zkoušení komunikace websockety. Budou zde uvedeny příkazy implementované
-                na serveru, které lze použít použít pro komunikaci a server s nimi bude nakládat rozdílně.
+                    Tato stránka slouží ke zkoušení komunikace websockety. Budou zde uvedeny příkazy implementované
+                    na serveru, které lze použít použít pro komunikaci a server s nimi bude nakládat rozdílně.
                 </p>
                 <p>
-                Dále zde budou uvedena schémata pro JSON objekty, které využijeme pro jednotlivé typy komunikací.
+                    Dále zde budou uvedena schémata pro JSON objekty, které využijeme pro jednotlivé typy komunikací.
                 </p>
             </div>
-            
+
             <div>
-                <table id="cmdTable">
+                <table class="tab">
                     <thead>
                         <tr>
                             <td>
@@ -30,20 +30,68 @@
                             </td>
                         </tr>
                     </thead>
-                    
+
                     <tbody>
                         <tr>
                             <td>
-                               getDB 
+                                getDB 
                             </td>
                             <td>
-                               Vypíše veškerý obsah z databáze.
+                                Vypíše veškerý obsah z databáze.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                getDB((ASC)|(DESC),POČET_ŘÁDKŮ)
+                            </td>
+                            <td>
+                                Vypíše definovaný počet řádků obsah z databáze ASC = vzestupně, DESC = sestupně.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                addUser(JMÉNO,PŘÍJMENÍ)
+                            </td>
+                            <td>
+                                Přidá uživatele do databáze.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                getUser(ČÍSLO)
+                            </td>
+                            <td>
+                                Vrátí uživatele se specifikovaným ID.
                             </td>
                         </tr>
                     </tbody>
                 </table>
+
+                <table class="tab">
+                    <thead>
+                        <tr>
+                            <td>
+                                Schéma
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                Schéma automaticky generováno pomocí gson knihovny, která je dostupná na gitu.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                {"type":"USER","object":{"idUser":INT,"userName":"STRING"}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
             </div>
-            
+
+
             <h:outputScript library="js" name="webSocket.js" />
             <h:form id="control">
                 <h:inputText id="text" value="#{webSocketBean.message}" />

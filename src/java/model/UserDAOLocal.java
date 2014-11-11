@@ -22,7 +22,9 @@ public interface UserDAOLocal {
     User getUser(int user);
 
     List<User> getAllUsers();
+    
+    void deleteAllUsers();
 
-    void deleteStudent(int idUser);
+    void deleteUser(int idUser);
     
 }

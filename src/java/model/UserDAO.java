@@ -6,9 +6,19 @@
 package model;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.RollbackException;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
 
 /**
  *
@@ -16,9 +26,9 @@ import javax.persistence.PersistenceContext;
  */
 @Stateless
 public class UserDAO implements UserDAOLocal {
+
     @PersistenceContext
     private EntityManager em;
-    
     
     @Override
     public void addUser(User user) {
@@ -29,7 +39,6 @@ public class UserDAO implements UserDAOLocal {
     public void editUser(User user) {
         em.merge(user);
     }
-
 
     @Override
     public User getUser(int user) {
@@ -42,9 +51,16 @@ public class UserDAO implements UserDAOLocal {
     }
 
     @Override
-    public void deleteStudent(int userId) {
-        em.remove(getUser(userId));
+    public void deleteUser(int userId) {
+        //em.remove(getUser(userId));
+        em.remove(em.merge(getUser(userId)));
     }
-    
-    
+
+    @Override
+    public void deleteAllUsers() {
+        for (User u : getAllUsers()) {
+            em.remove(u);
+        }
+    }
+
 }
