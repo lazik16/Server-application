@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+        <ui:composition template="./../WEB-INF/Templates/basicTemplate.xhtml">
+            <div id="wrapper">
+                <ui:define name="left">
+                    <h:form>
+                        <h:panelGrid>
+                            <h:outputText value="Zařízení" />
+
+                            <h:selectOneMenu value="#{userpage.selectedNumber}" valueChangeListener="#{userpage.change}" immediate="true">
+                                <f:selectItems value="#{user.phoneNumbers}" var="phoneNumber"
+                                               itemLabel="#{util.byteToString(phoneNumber.number)}"/>
+                                <f:ajax execute="name" render="selDevice" />
+                            </h:selectOneMenu>
+
+                            
+                            <h:outputText id="selDevice" value="Vybrané: #{userpage.selectedNumber}"/>
+                            <h:link id="newContact" value="Nový kontakt" outcome="newContact" />
+                            
+                        </h:panelGrid>
+                        <div id="contacts">
+                            <h:dataTable border="0" value="#{user.contacts}" var="item">
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Kontakty"/>
+                                    </f:facet> 
+                                    <h:commandLink  value="#{item.nick}" action="#{message.setSelectedContact(item)}">
+                                        <f:ajax execute="name" render="output" />
+                                    </h:commandLink>
+                                </h:column>
+                            </h:dataTable>
+                        </div>
+                    </h:form>
+                </ui:define>
+
+                <ui:define name="content">
+                    <div id="fromHeader">
+                        Komu: <h:outputText id="output" value="#{message.selectedContact.nick}"  />
+                    </div>
+
+                    <div id="chatBox">
+                        <h:form id="inputChat">
+                            <h:panelGroup>
+                                <h:inputText id="inputBox" value="#{message.text}" size="75" />
+                                <h:commandButton id="send" action="#{message.send()}" value="Send">
+                                    <f:ajax execute="@form" render="@none" />
+                                </h:commandButton>
+                            </h:panelGroup>
+                        </h:form>
+                    </div>
+
+                    <h:form id="outputChat">
+                        <div id="chatDisplay">
+                            <!--    <h:dataTable border="0" value="" var="item">
+                                    <h:column>
+                                        <h:outputText value="Datum: "/>
+                                    </h:column>
+                                    <h:column>
+                                        <h:outputText value="Text: "/>
+                                    </h:column>
+                                </h:dataTable>
+                            -->
+                        </div>
+                    </h:form>
+                </ui:define>
+            </div>
+
+        </ui:composition>
+
+    </body>
+</html>

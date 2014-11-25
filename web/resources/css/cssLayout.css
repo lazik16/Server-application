@@ -48,6 +48,10 @@
     min-height: 300px;
 }
 
+#content{
+
+}
+
 .left_content {
     background-color: #dddddd;
     padding: 5px;
@@ -61,15 +65,29 @@
 }
 
 #top a:link, #top a:visited {
-  color: white;
-  font-weight : bold;
-  text-decoration: none;
+    color: white;
+    font-weight : bold;
+    text-decoration: none;
 }
 
 #top a:link:hover, #top a:visited:hover  {
-  color: black;
-  font-weight : bold;
-  text-decoration : underline;
+    color: black;
+    font-weight : bold;
+    text-decoration : underline;
+}
+
+.login{
+    position: relative;
+    color: white;
+    margin: auto;
+    padding: 30px; 
+    height: 150px;
+    width: 350px;
+    background-color: rgb(93,93,93);
+}
+
+#loginBtn{
+    position: relative;
 }
 
 

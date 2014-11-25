@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+        <ui:composition template="./../WEB-INF/Templates/basicTemplate.xhtml">
+            <ui:define name="content">
+                <table>
+                    <tr>
+                        <td>
+                            <h:form>
+                                <h3>Účet uživatele "#{user.email}"</h3>
+                                <h:panelGrid>
+                                    Jméno 
+                                    <h:panelGroup><h:inputText id="name" size="35" value="#{user.name}" required="true" requiredMessage="Zadejte jméno"/> <h:message id="namVal" for="name" style="color:red"/></h:panelGroup>
+                                    Příjmení 
+                                    <h:panelGroup><h:inputText id="surname" size="35" value="#{user.surname}" required="true" requiredMessage="Zadejte příjmení"/> <h:message id="surVal" for="surname" style="color:red"/></h:panelGroup>
+                                    Email 
+                                    <h:panelGroup><h:inputText id="emailA" size="35" value="#{user.email}" required="true" requiredMessage="Zadejte email"/> <h:message id="emaVal" for="emailA" style="color:red"/></h:panelGroup>
+                                    Email znovu 
+                                    <h:panelGroup><h:inputText id="emailB" size="35" value="#{user.emailB}" required="true" requiredMessage="Zadejte email znovu"/> <h:message id="embVal" for="emailB" style="color:red"/></h:panelGroup>
+                                    Heslo 
+                                    <h:panelGroup><h:inputSecret id="passA" size="35" value="#{user.password}" required="true" requiredMessage="Zadejte heslo"/> <h:message id="paaVal" for="passA" style="color:red"/></h:panelGroup>
+                                    Heslo znovu 
+                                    <h:panelGroup><h:inputSecret id="passB" size="35" value="#{user.passwordB}" required="true" requiredMessage="Zadejte heslo znovu"/> <h:message id="pabVal" for="passB" style="color:red"/></h:panelGroup>
+
+                                    <h:panelGroup>
+                                        <h:commandButton id="regBtn" value="Uložit" action="#{user.edit()}"/>
+                                        <form>
+                                            <h:commandButton id="backBtn" immediate="true" value="Zpět" action="/restricted/userhome"/>
+                                        </form>
+                                    </h:panelGroup>
+                                </h:panelGrid>
+                            </h:form>
+                        </td>            
+                        <td>            
+                            <h:form>
+                                <h:panelGrid>
+                                    <h3>Připojená zařízení</h3>
+                                    <h:panelGroup>
+                                        Hodilo by se nějaké description k číslům.
+
+                                        <h:dataTable border="0" value="#{user.phoneNumbers}" var="item">
+                                            <h:column>
+                                                <f:facet name="header">
+                                                    <h:outputText value="Telefon"/>
+                                                </f:facet>
+                                                <h:link  value="#{util.byteToString(item.number)}"/>
+                 
+                                            </h:column>
+                                            <h:column>
+                                                <h:commandButton value="Odstranit"/>
+                                            </h:column>
+                                        </h:dataTable>
+
+                                    </h:panelGroup>
+                                    <h4>Telefonní číslo</h4>
+                                    <h:panelGroup>
+                                        <h:inputText id="number" size="35" value="#{phone.number}" required="true" requiredMessage="Zadejte telefon"/>
+                                        <h:message id="numVal" for="name" style="color:red"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup><h:commandButton value="Přidat" action="#{phone.assignNumber(user.email)}" />
+                                    </h:panelGroup>
+                                </h:panelGrid>
+                            </h:form>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>

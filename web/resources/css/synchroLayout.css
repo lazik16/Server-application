@@ -1,0 +1,87 @@
+
+#top {
+    position: relative;
+    background-color: rgb(55,55,55);
+    color: white;
+    padding: 5px;
+    margin: 0px 0px 10px 0px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#bottom {
+    position: relative;
+    background-color: rgb(55,55,55);
+    color: white;
+    padding: 5px;
+    margin: 20px 0px 0px 0px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#bottomText{
+    text-align: center;
+}
+
+#wrapper{
+    position: relative;
+    color: white;
+    margin: auto;
+    height: auto;
+    width: auto;
+}
+
+#left {
+    position: relative;
+    color: white;
+    height: max-content;
+    width: 200px;
+    background-color: rgb(93,93,93);
+    float: left;
+    min-height: 400px;
+    height: max-content;
+    padding-left: 20px;
+    padding-top: 10px;
+}
+
+#content{
+    position: relative;
+    background-color: #FFFFFF;
+    margin-left: 220px;
+    margin-right: auto;
+    width: 600px;
+    min-height: 400px;
+    height: max-content;
+}
+
+#chatBox{
+    position: relative;
+    background-color: rgb(93,93,93);
+    width: auto;
+    padding: 10px;
+}
+
+#fromHeader{
+    position: relative;
+    background-color: #dddddd;
+    width: auto;
+    height: 35px;
+}
+
+#contacts{
+    position: relative;
+}
+
+#top a:link, #top a:visited {
+    color: white;
+    font-weight : bold;
+    text-decoration: none;
+}
+
+#top a:link:hover, #top a:visited:hover  {
+    color: black;
+    font-weight : bold;
+    text-decoration : underline;
+}
+
+

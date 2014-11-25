@@ -16,7 +16,7 @@ h1 {
     color: #D20005;
 }
 
-.tab {
+#cmdTable {
     color: #00000;
     background-color: #FFFFFF;
     border: 2px solid #683900;
@@ -24,7 +24,7 @@ h1 {
     border-spacing: 2px;
 }
 
-.tab thead{
+#cmdTable thead{
     font-weight: bold;
     border: 2px solid #683900;
 }

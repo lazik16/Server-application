@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-var wsUri = "ws://apsync.duckdns.org/echo";
+var wsUri = "ws://apsync.duckdns.org/ROPR/anth";
 var output;
 var message;
 
 function init()
 {
-    output = document.getElementById("output");
+    output = document.getElementById("outputBox");
     testWebSocket();
 }
 
@@ -43,6 +43,7 @@ function onClose(evt)
 
 function onMessage(evt)
 {
+    //var data = Handler.getResult(evt.data);
     writeToScreen('<span style="color: blue;">RESPONSE: ' + evt.data + '</span>');
 }
 
@@ -53,7 +54,7 @@ function onError(evt)
 
 function doSend()
 {
-    message = document.getElementById("control:text").value;
+    message = document.getElementById("control:inputBox").value;
     websocket.send(message);
 }
 
