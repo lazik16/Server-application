@@ -18,5 +18,6 @@ Changelog pro v0.3
 - párování uživatele a účtu,
 - vytváření zpráv a zobrazování,
 - volbu zařízení
+- Odebrány websockety (budou znovudoplněny v další verzi zaměřené na komunikaci s telefonem)
 
 - Odkaz zde: http://apsync.duckdns.org/SMSCore/
