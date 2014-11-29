@@ -12,11 +12,11 @@ Changelog pro v0.12
 - vzhledem k parsování byl zaveden typ zprávy, ten je parsován spolu s uživatelem, aby příjemci bylo jasné, o jaký objekt se jedná a mohla jej na základě této informace rekonstruovat. Tento konstrukt se nachází ve třídě ObjectJSON. (src/java/json/)
 
 Changelog pro v0.3
-Doplněn víceméně funkční prototyp pokrývající:
-registraci,
-přihlašívání,
-párování uživatele a účtu,
-vytváření zpráv a zobrazování,
-volbu zařízení
+- Doplněn víceméně funkční prototyp pokrývající:
+- registraci,
+- přihlašívání,
+- párování uživatele a účtu,
+- vytváření zpráv a zobrazování,
+- volbu zařízení
 
-http://apsync.duckdns.org/SMSCore/
+- Odkaz zde: http://apsync.duckdns.org/SMSCore/
