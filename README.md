@@ -10,3 +10,13 @@ Changelog pro v0.12
 - server nyní využívá port 80.
 - do využitých knihoven nyní spadá i gson, pomocí něhož je parsován objekt pro odeslání.
 - vzhledem k parsování byl zaveden typ zprávy, ten je parsován spolu s uživatelem, aby příjemci bylo jasné, o jaký objekt se jedná a mohla jej na základě této informace rekonstruovat. Tento konstrukt se nachází ve třídě ObjectJSON. (src/java/json/)
+
+Changelog pro v0.3
+Doplněn víceméně funkční prototyp pokrývající:
+registraci,
+přihlašívání,
+párování uživatele a účtu,
+vytváření zpráv a zobrazování,
+volbu zařízení
+
+http://apsync.duckdns.org/SMSCore/
