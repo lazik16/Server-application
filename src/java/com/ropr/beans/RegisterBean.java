@@ -6,11 +6,11 @@
 package com.ropr.beans;
 
 import com.ropr.ejb.Mail;
-import com.ropr.model.dao.UserDAOLocal;
 import java.io.Serializable;
 import javax.ejb.EJB;
 import javax.faces.bean.ViewScoped;
 import com.ropr.model.User;
+import com.ropr.model.UserFacadeLocal;
 import javax.faces.context.FacesContext;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -34,7 +34,7 @@ public class RegisterBean implements Serializable {
     private String surname;
 
     @EJB
-    private UserDAOLocal userDao;
+    private UserFacadeLocal userDao;
 
     public RegisterBean() {
 
@@ -56,7 +56,7 @@ public class RegisterBean implements Serializable {
             return (emailA = emailB = null);
         }
 
-        userDao.addUser(prepAdd());
+        userDao.create(prepAdd());
         mail.send(emailA, "[APSYNC]Účet pro uživatele " + name + " " + surname + " vytvořen", 
                 "Váš účet byl úspěšně vytvořen s následujícími údaji:"
                 + "\n\nUživatelské jméno: "+emailA
@@ -68,8 +68,8 @@ public class RegisterBean implements Serializable {
     private User prepAdd() {
         System.out.println(surname);
         User toAdd = new User();
-        toAdd.setFirstName(name);
-        toAdd.setLastName(surname);
+        toAdd.setName(name);
+        toAdd.setSurname(surname);
         toAdd.setEmail(emailA);
         toAdd.setPassword(passwordA);
         return toAdd;

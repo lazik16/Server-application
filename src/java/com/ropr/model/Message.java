@@ -34,15 +34,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Message.findAll", query = "SELECT m FROM Message m"),
-    @NamedQuery(name = "Message.findById", query = "SELECT m FROM Message m WHERE m.id = :id"),
-    @NamedQuery(name = "Message.findBySendTime", query = "SELECT m FROM Message m WHERE m.sendTime = :sendTime")})
+    @NamedQuery(name = "Message.findByIdMessage", query = "SELECT m FROM Message m WHERE m.idMessage = :idMessage"),
+    @NamedQuery(name = "Message.findByReciever", query = "SELECT m FROM Message m WHERE m.reciever = :reciever"),
+    @NamedQuery(name = "Message.findBySendTime", query = "SELECT m FROM Message m WHERE m.sendTime = :sendTime"),
+    @NamedQuery(name = "Message.findBySender", query = "SELECT m FROM Message m WHERE m.sender = :sender")})
 public class Message implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
-    private Integer id;
+    @Column(name = "idMessage")
+    private Integer idMessage;
     @Basic(optional = false)
     @NotNull
     @Lob
@@ -51,35 +53,44 @@ public class Message implements Serializable {
     private String text;
     @Basic(optional = false)
     @NotNull
+    @Size(min = 1, max = 42)
+    @Column(name = "reciever")
+    private String reciever;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "sendTime")
     @Temporal(TemporalType.TIMESTAMP)
     private Date sendTime;
-    @JoinColumn(name = "from", referencedColumnName = "id")
-    @ManyToOne
-    private Phonenumber from1;
-    @JoinColumn(name = "to", referencedColumnName = "id")
-    @ManyToOne
-    private Phonenumber to;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 42)
+    @Column(name = "sender")
+    private String sender;
+    @JoinColumn(name = "Contact_idContact", referencedColumnName = "idContact")
+    @ManyToOne(optional = false)
+    private Contact contactidContact;
 
     public Message() {
     }
 
-    public Message(Integer id) {
-        this.id = id;
+    public Message(Integer idMessage) {
+        this.idMessage = idMessage;
     }
 
-    public Message(Integer id, String text, Date sendTime) {
-        this.id = id;
+    public Message(Integer idMessage, String text, String reciever, Date sendTime, String sender) {
+        this.idMessage = idMessage;
         this.text = text;
+        this.reciever = reciever;
         this.sendTime = sendTime;
+        this.sender = sender;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getIdMessage() {
+        return idMessage;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIdMessage(Integer idMessage) {
+        this.idMessage = idMessage;
     }
 
     public String getText() {
@@ -90,6 +101,14 @@ public class Message implements Serializable {
         this.text = text;
     }
 
+    public String getReciever() {
+        return reciever;
+    }
+
+    public void setReciever(String reciever) {
+        this.reciever = reciever;
+    }
+
     public Date getSendTime() {
         return sendTime;
     }
@@ -98,26 +117,26 @@ public class Message implements Serializable {
         this.sendTime = sendTime;
     }
 
-    public Phonenumber getFrom1() {
-        return from1;
+    public String getSender() {
+        return sender;
     }
 
-    public void setFrom1(Phonenumber from1) {
-        this.from1 = from1;
+    public void setSender(String sender) {
+        this.sender = sender;
     }
 
-    public Phonenumber getTo() {
-        return to;
+    public Contact getContactidContact() {
+        return contactidContact;
     }
 
-    public void setTo(Phonenumber to) {
-        this.to = to;
+    public void setContactidContact(Contact contactidContact) {
+        this.contactidContact = contactidContact;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (idMessage != null ? idMessage.hashCode() : 0);
         return hash;
     }
 
@@ -128,7 +147,7 @@ public class Message implements Serializable {
             return false;
         }
         Message other = (Message) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.idMessage == null && other.idMessage != null) || (this.idMessage != null && !this.idMessage.equals(other.idMessage))) {
             return false;
         }
         return true;
@@ -136,7 +155,7 @@ public class Message implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ropr.model.Message[ id=" + id + " ]";
+        return "com.ropr.model.Message[ idMessage=" + idMessage + " ]";
     }
     
 }

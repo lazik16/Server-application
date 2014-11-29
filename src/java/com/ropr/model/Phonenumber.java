@@ -6,16 +6,14 @@
 package com.ropr.model;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -34,111 +32,75 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Phonenumber.findAll", query = "SELECT p FROM Phonenumber p"),
-    @NamedQuery(name = "Phonenumber.findById", query = "SELECT p FROM Phonenumber p WHERE p.id = :id"),
-    @NamedQuery(name = "Phonenumber.findByKey", query = "SELECT p FROM Phonenumber p WHERE p.key = :key")})
+    @NamedQuery(name = "Phonenumber.findByIdPhone", query = "SELECT p FROM Phonenumber p WHERE p.idPhone = :idPhone"),
+    @NamedQuery(name = "Phonenumber.findByNumber", query = "SELECT p FROM Phonenumber p WHERE p.number = :number")})
 public class Phonenumber implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
-    private Integer id;
+    @Column(name = "idPhone")
+    private Integer idPhone;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 10)
-    @Column(name = "key")
-    private String key;
-    @Basic(optional = false)
-    @NotNull
-    @Lob
+    @Size(min = 1, max = 42)
     @Column(name = "number")
-    private byte[] number;
-    @OneToMany(mappedBy = "phoneNumber")
-    private Collection<Contact> contactCollection;
-    @JoinColumn(name = "user", referencedColumnName = "id")
-    @ManyToOne
-    private User user;
-    @OneToMany(mappedBy = "from1")
-    private Collection<Message> messageCollection;
-    @OneToMany(mappedBy = "to")
-    private Collection<Message> messageCollection1;
+    private String number;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "phonenumberid")
+    private List<Contact> contactList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "phonenumberId")
+    private List<Device> deviceList;
 
     public Phonenumber() {
     }
 
-    public Phonenumber(Integer id) {
-        this.id = id;
+    public Phonenumber(Integer idPhone) {
+        this.idPhone = idPhone;
     }
 
-    public Phonenumber(Integer id, String key, byte[] number) {
-        this.id = id;
-        this.key = key;
+    public Phonenumber(Integer idPhone, String number) {
+        this.idPhone = idPhone;
         this.number = number;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getIdPhone() {
+        return idPhone;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIdPhone(Integer idPhone) {
+        this.idPhone = idPhone;
     }
 
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public byte[] getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(byte[] number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 
     @XmlTransient
-    public Collection<Contact> getContactCollection() {
-        return contactCollection;
+    public List<Contact> getContactList() {
+        return contactList;
     }
 
-    public void setContactCollection(Collection<Contact> contactCollection) {
-        this.contactCollection = contactCollection;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
+    public void setContactList(List<Contact> contactList) {
+        this.contactList = contactList;
     }
 
     @XmlTransient
-    public Collection<Message> getMessageCollection() {
-        return messageCollection;
+    public List<Device> getDeviceList() {
+        return deviceList;
     }
 
-    public void setMessageCollection(Collection<Message> messageCollection) {
-        this.messageCollection = messageCollection;
-    }
-
-    @XmlTransient
-    public Collection<Message> getMessageCollection1() {
-        return messageCollection1;
-    }
-
-    public void setMessageCollection1(Collection<Message> messageCollection1) {
-        this.messageCollection1 = messageCollection1;
+    public void setDeviceList(List<Device> deviceList) {
+        this.deviceList = deviceList;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (idPhone != null ? idPhone.hashCode() : 0);
         return hash;
     }
 
@@ -149,7 +111,7 @@ public class Phonenumber implements Serializable {
             return false;
         }
         Phonenumber other = (Phonenumber) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.idPhone == null && other.idPhone != null) || (this.idPhone != null && !this.idPhone.equals(other.idPhone))) {
             return false;
         }
         return true;
@@ -157,7 +119,7 @@ public class Phonenumber implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ropr.model.Phonenumber[ id=" + id + " ]";
+        return "com.model.Phonenumber[ idPhone=" + idPhone + " ]";
     }
     
 }

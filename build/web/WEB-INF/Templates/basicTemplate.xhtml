@@ -16,12 +16,14 @@
         <div id="top">
             <ui:insert name="top">
                 <c:choose>
-                    <c:when test="#{user.loggedIn}">
-                        <p>Přihlášen jako: #{user.email}</p>
+                    <c:when test="#{login.loggedIn}">
+                        <p>Přihlášen jako: #{login.email}</p>
                         <h:form>
-                            <h:commandLink value="Odhlásit se" action="#{user.logout}"/>
+                            <h:commandLink value="Odhlásit se" action="#{login.logout}"/>
                             &#160;
                             <h:link value="Správa účtu" outcome="/restricted/viewAccount"/>
+                            &#160;
+                            <h:link value="Uživatelská sekce" outcome="/restricted/userhome"/>
                         </h:form>
 
                     </c:when>
@@ -48,7 +50,7 @@
         </div>
         <div id="bottom">
             <ui:insert name="bottom">
-                Powered by A-TEAM &amp; Wildfly 8.1.0 Final
+                Powered by A-TEAM &amp; Wildfly 8.1.0 Final &amp; JSF2.2 PRIME FACES
             </ui:insert>
         </div>
 

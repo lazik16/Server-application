@@ -5,10 +5,12 @@
  */
 package com.ropr.beans;
 
+import com.ropr.model.Contact;
+import com.ropr.model.ContactFacadeLocal;
+import com.ropr.model.Device;
 import com.ropr.model.Phonenumber;
+import com.ropr.model.PhonenumberFacadeLocal;
 import com.ropr.model.User;
-import com.ropr.model.dao.ContactDAOLocal;
-import com.ropr.model.dao.PhoneDAOLocal;
 import java.io.Serializable;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -22,16 +24,27 @@ import javax.faces.application.FacesMessage;
  */
 @ManagedBean(name = "contact")
 @ViewScoped
-public class ContactBean implements Serializable{
+public class ContactBean implements Serializable {
 
     private String name, surname, nickname, email;
-    int number;
+    String number;
+    private Device selectedDevice;
+    
+    
+
+    public Device getSelectedDevice() {
+        return selectedDevice;
+    }
+
+    public void setSelectedDevice(Device selectedDevice) {
+        this.selectedDevice = selectedDevice;
+    }
 
     @EJB
-    ContactDAOLocal contactDao;
+    ContactFacadeLocal contactDao;
     @EJB
-    PhoneDAOLocal phoneDao;
-
+    PhonenumberFacadeLocal phoneDao;
+    
     public String getName() {
         return name;
     }
@@ -64,37 +77,35 @@ public class ContactBean implements Serializable{
         this.email = email;
     }
 
-    public int getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 
     public String addContact(User user) {
-        Phonenumber ph = new Phonenumber();
-        if (phoneDao.getPhonenumber(number) != null) {
-            ph = phoneDao.getPhonenumber(number);
-        } else {
-            ph.setKey("4567ds");
-            ph.setNumber(Integer.toString(number).getBytes());
-            ph.setUser(user);
-            //phoneDao.addPhonenumber(ph);
+        if (selectedDevice != null) {
+            Contact c = new Contact();
+            c.setEmail(email);
+            c.setFirstName(name);
+            c.setLastName(surname);
+            c.setNick(nickname);
+            c.setDeviceid(selectedDevice);
+            
+            Phonenumber p = new Phonenumber();
+            p.setNumber(number);
+            
+            phoneDao.create(p);
+            
+            p = phoneDao.findByNumber(number);
+            c.setPhonenumberid(p);
+            
+            contactDao.create(c);
+            return "/restricted/userhome?faces-redirect=true";
         }
-
-        /*if (contactDao.findContactByUserNumber(user,ph) != null) {
-            System.out.println("Contact is already in your list.");
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Tento kontakt již máte přidaný"));
-            return "/restricted/userhome?faces-redirect=false";
-
-        } else {*/
-            //Contact c = new Contact(
-            //        name, surname, nickname, email, ph, user);
-            //contactDao.addContact(c);
-            //System.out.println("Contact added.");
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Tento kontakt již máte přidaný"));
-            return "/restricted/newContact?faces-redirect=false";
-        //}
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Musíte vybrat zařízení"));
+        return "/restricted/newContact?faces-redirect=false";
     }
 }
