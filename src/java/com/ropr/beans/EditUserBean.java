@@ -90,10 +90,14 @@ public class EditUserBean implements Serializable{
     DeviceFacadeLocal deviceDao;
     
     public String editUser(){
-        userDao.edit(user);
+        user.setEmail(emailA);
+        user.setPassword(passA);
+        user.setName(name);
+        user.setSurname(surname);
         
+        userDao.edit(user);
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        user = (User)facesContext.getExternalContext().getSessionMap().put(StaticVariables.USER,user);
+        facesContext.getExternalContext().getSessionMap().put(StaticVariables.USER,user);
         return "/restricted/userhome?faces-redirect=true";
     }
     

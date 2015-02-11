@@ -12,63 +12,79 @@
                 <ui:define name="left">
                     <h:form id="sideForm">
                         <h:panelGrid>
-                            <h:outputText value="Zařízení" />
-
-                            <p:selectOneMenu id="deviceSelector" value="#{userpage.selectedDevice}" converter="entityConverter">
+                            <f:facet name="header">
+                                    Zařízení
+                            </f:facet>
+                            <p:selectOneMenu id="deviceSelector" value="#{device.selectedDevice}" converter="entityConverter">
+                                <f:selectItem itemLabel="Vyberte zařízení" />
                                 <f:selectItems value="#{userpage.deviceList}" var="dev"
                                                itemLabel="#{dev.phonenumberId.number}"
                                                itemValue="#{dev}"/>
-                                <p:ajax event="change" update="@all" />
+                                <p:ajax event="change" listener="#{device.update}" update=":sideForm:contacList" />
                             </p:selectOneMenu>
-                            <h:link id="newContact" value="Nový kontakt" outcome="/restricted/newContact" />
+                            <p:commandButton id="newContact" value="Nový kontakt" action="/restricted/newContact?faces-redirect=true" />
                         </h:panelGrid>
 
-
-                        <div id="contacts">
-                            <h:dataTable border="0" value="#{userpage.contactList}" var="item">
-                                <p:column >
-                                    <f:facet name="header">
-                                        <h:outputText value="Kontakty"/>
-                                    </f:facet> 
-                                    <p:commandLink  value="#{item.nick}" action="#{message.setSelectedContact(item)}"
-                                                    ajax="true" update=":mainForm:chatTable, :mainForm:output"/>
+                        <div id="ctList">
+                            <p:dataTable id="contacList"
+                                         value="#{device.contactList}"
+                                         var="item"
+                                         selectionMode="single"
+                                         selection="#{contact.selectedContact}"
+                                         rowKey="#{item}"
+                                         paginator="true"
+                                         paginatorTemplate="{PreviousPageLink} {PageLinks} {NextPageLink}"
+                                         paginatorPosition="bottom"
+                                         rows="5"
+                                         styleClass="borderless"
+                                         >
+                                <f:facet name="header">
+                                    Kontakty
+                                </f:facet>
+                                <p:ajax event="rowSelect" listener="#{contact.update()}" update=":mainForm:chatTable" />
+                                <p:column>
+                                    <h:panelGrid>
+                                        <h:outputText styleClass="contactNick" value="#{item.nick}"/>
+                                        <h:outputText styleClass="contactNumber" value="#{item.phonenumberid.number}"/>
+                                    </h:panelGrid>
                                 </p:column>
-                            </h:dataTable>
+                            </p:dataTable>
                         </div>
                     </h:form>
+
                 </ui:define>
 
                 <ui:define name="content">
                     <h:form id="mainForm">
-                        Komu: <h:outputText id="output" value="#{message.selectedContact.nick}"  />
+                        Zvolený kontakt: <h:outputText styleClass="boldie" id="output" value="#{contact.printoutNick}"  />
 
                         <div id="chatBox">
                             <h:form id="inputChat">
                                 <h:panelGroup>
-                                    <p:inputText id="inputBox" value="#{message.text}" size="75" />
-
-                                    <p:commandButton id="send" action="#{message.send()}" value="Send"
-                                                     update=":mainForm:chatTable, :mainForm:inputChat:inputBox" ajax="true" />
-                                                     
+                                    <p:inputText id="inputBox" value="#{contact.text}" size="75" />
+                                    <p:commandButton id="send" action="#{contact.send()}" value="Send"
+                                                     update=":mainForm:chatTable, :mainForm:inputChat:inputBox" ajax="true" />           
                                 </h:panelGroup>
+                                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
                             </h:form>
                         </div>
-                        <p:outputPanel id="outChatTable"> 
+
+                        <p:outputPanel id="outChatTable">
                             <p:dataTable 
                                 liveScroll="true" 
                                 emptyMessage="Žádné zprávy" 
-                                scrollHeight="320" 
+                                scrollHeight="400" 
                                 id="chatTable" 
-                                value="#{message.messageList}" 
+                                value="#{contact.messageList}" 
                                 var="msg"
                                 scrollable="true"
                                 rows="20"
+                                styleClass="borderless"
                                 >
-                                <p:column>
+                                <p:column width="auto" styleClass="#{contact.getStyle(msg)}">
                                     <h:panelGrid>
-                                        <h:outputText value="Od: #{message.getRealSender(msg)}  Pro: #{message.getRealReceiver(msg)}" />
-                                        <h:outputText value="Datum: #{msg.sendTime}" />
-                                        <h:outputText value="Zpráva #{msg.text}"/>
+                                        <h:outputText id="msgHead" value="Od: #{contact.getRealSender(msg)}, #{msg.sendTime}" />
+                                        <h:outputText value="Zpráva: #{msg.text}"/>
                                     </h:panelGrid>
                                 </p:column>
                             </p:dataTable>

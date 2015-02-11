@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="Reverse engineered java.com.ropr.filter 2015.02.10 19-20-07-280">
+  <ClassDiagramComponents>
+    <Class xPosition="20.0" yPosition="20.0" package="com.ropr.filter" name="ConnectionFilter" visibility="public">
+      <Constructors/>
+      <Fields>
+        <Field name="utx" visibility="private" type="UserTransaction"/>
+      </Fields>
+      <Methods>
+        <Method name="destroy" visibility="public" returnType="void"/>
+        <Method name="doFilter" visibility="public" returnType="void">
+          <Argument type="ServletRequest" name="request"/>
+          <Argument type="ServletResponse" name="response"/>
+          <Argument type="FilterChain" name="chain"/>
+        </Method>
+        <Method name="init" visibility="public" returnType="void">
+          <Argument type="FilterConfig" name="arg0"/>
+        </Method>
+      </Methods>
+    </Class>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations/>
+</ClassDiagram>

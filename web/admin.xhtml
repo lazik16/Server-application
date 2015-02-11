@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./WEB-INF/Templates/basicTemplate.xhtml">
+
+            <ui:define name="left">
+
+            </ui:define>
+            <ui:define name="content">
+                <div class="qwer">
+                    <f:view>
+                        <h:form id="form">
+                            <p:growl id="msgs" showDetail="true">
+                                <p:dataTable 
+                                    emptyMessage="Nikdo není připojen" 
+                                    id="devTable" 
+                                    value="#{admin.onlineDevice}" 
+                                    var="dev"
+                                    rowSelectMode="multiple"
+                                    selection="#{admin.checkedSessions}" rowKey="#{dev}"
+                                    >
+
+                                    <f:facet name="header">
+                                        Připojená zařízení
+                                    </f:facet>
+                                    <p:ajax event="rowSelect" listener="#{admin.onMessageSent}" update=":form:msgs" />
+                                    <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                                    <p:column headerText="Zařízení">
+                                        <h:outputText value="#{dev.device.phonenumberId.number}" />
+                                    </p:column>
+                                    <p:column headerText="Session">
+                                        <h:outputText value="#{dev.session}" />
+                                    </p:column>
+                                    
+                                </p:dataTable>
+
+                                <p:poll interval="3" update="devTable" />
+
+                                Zpráva pro zařízení:
+                                <p:row>
+                                    <p:inputText id="inputBox" value="#{admin.textToSend}" />
+                                    <p:commandButton id="sendBtn" value="Send" action="#{admin.sendToDevice(dev.session)}" ajax="true"/>
+                                </p:row>
+                            </p:growl>
+                        </h:form>
+                    </f:view>
+                </div>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>

@@ -5,6 +5,8 @@
  */
 package com.ropr.utility;
 
+import com.ropr.sync.Daemon;
+
 /**
  *
  * @author Dominik
@@ -13,4 +15,5 @@ public class StaticVariables {
     public static String USER = "USER";
     public static String CONTACT = "CONTACT";
     public static String DEVICE = "DEVICE";
+    //public static Daemon d2m = new Daemon();
 }

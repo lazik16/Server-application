@@ -25,30 +25,40 @@ import javax.faces.application.FacesMessage;
 public class LoginBean implements Serializable{
     private String email;
     private String password;
-    
+    private User current;
+
+    public User getCurrent() {
+        return current;
+    }
+
     @EJB
     private UserFacadeLocal userDao;
     
     public String login() {
-        User current = userDao.findByEmail(email);
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        current = userDao.findByEmail(email);
         if (current != null && !current.getPassword().equals(password)) {
             current = null;
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Chyba!","Špatné jméno nebo heslo"));
         }
-        FacesContext facesContext = FacesContext.getCurrentInstance();
+        
         if (current == null) {
-            facesContext.addMessage(null, new FacesMessage("Tento uživatel neexistuje"));
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Chyba!","Tento uživatel neexistuje"));
             return (email = password = null);
         } else {
             facesContext.getExternalContext().getSessionMap().put(
                     StaticVariables.USER, current);
+            System.out.println("User >> "+current + "logged in");
             return "/restricted/userhome?faces-redirect=true";
         }
     }
     
     public String logout() {
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-        .remove(StaticVariables.USER);
+        System.out.println("User >> "+FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(StaticVariables.USER)
+        +" logged out");
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove(StaticVariables.USER);
+        
         return "/login?faces-redirect=true";
     }
 

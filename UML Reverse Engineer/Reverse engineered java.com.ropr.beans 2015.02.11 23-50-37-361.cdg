@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="Reverse engineered java.com.ropr.beans 2015.02.11 23-50-37-361">
+  <ClassDiagramComponents>
+    <Class xPosition="20.0" yPosition="20.0" package="com.ropr.beans" name="AdminBean" visibility="public">
+      <Constructors/>
+      <Fields>
+        <Field name="textToSend" visibility="private" type="String"/>
+        <Field name="checkedSessions" visibility="private" type="List&lt;DeviceStatus&gt;"/>
+        <Field name="contact" visibility="package" type="ContactFacadeLocal"/>
+      </Fields>
+      <Methods>
+        <Method name="getOnlineDevice" visibility="public" returnType="List&lt;DeviceStatus&gt;"/>
+        <Method name="getCheckedSessions" visibility="public" returnType="List&lt;DeviceStatus&gt;"/>
+        <Method name="setCheckedSessions" visibility="public" returnType="void">
+          <Argument type="List&lt;DeviceStatus&gt;" name="checkedSessions"/>
+        </Method>
+        <Method name="setSelected" visibility="public" returnType="void">
+          <Argument type="DeviceStatus" name="s"/>
+        </Method>
+        <Method name="getTextToSend" visibility="public" returnType="String"/>
+        <Method name="setTextToSend" visibility="public" returnType="void">
+          <Argument type="String" name="textToSend"/>
+        </Method>
+        <Method name="sendToDevice" visibility="public" returnType="void">
+          <Argument type="Session" name="s"/>
+        </Method>
+        <Method name="doTest" visibility="public" returnType="void"/>
+        <Method name="refresh" visibility="public" returnType="void"/>
+        <Method name="resyncDevice" visibility="public" returnType="void">
+          <Argument type="Session" name="s"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="320.0" yPosition="20.0" package="com.ropr.beans" name="ContactBean" visibility="public">
+      <Constructors/>
+      <Fields>
+        <Field name="text" visibility="private" type="String"/>
+        <Field name="selectedContact" visibility="private" type="Contact"/>
+        <Field name="messageList" visibility="private" type="List&lt;Message&gt;"/>
+        <Field name="facesContext" visibility="private" type="FacesContext" isFinal="true"/>
+        <Field name="contactDao" visibility="package" type="ContactFacadeLocal"/>
+        <Field name="messageDao" visibility="package" type="MessageFacadeLocal"/>
+        <Field name="daemon" visibility="package" type="Daemon"/>
+      </Fields>
+      <Methods>
+        <Method name="getMessageList" visibility="public" returnType="List&lt;Message&gt;"/>
+        <Method name="setMessageList" visibility="public" returnType="void">
+          <Argument type="List&lt;Message&gt;" name="messageList"/>
+        </Method>
+        <Method name="getSelectedContact" visibility="public" returnType="Contact"/>
+        <Method name="setSelectedContact" visibility="public" returnType="void">
+          <Argument type="Contact" name="selectedContact"/>
+        </Method>
+        <Method name="getRealSender" visibility="public" returnType="String">
+          <Argument type="Message" name="m"/>
+        </Method>
+        <Method name="getRealReceiver" visibility="public" returnType="String">
+          <Argument type="Message" name="m"/>
+        </Method>
+        <Method name="getPrintoutNick" visibility="public" returnType="String"/>
+        <Method name="getText" visibility="public" returnType="String"/>
+        <Method name="setText" visibility="public" returnType="void">
+          <Argument type="String" name="text"/>
+        </Method>
+        <Method name="update" visibility="public" returnType="void"/>
+        <Method name="send" visibility="public" returnType="void"/>
+        <Method name="getStyle" visibility="public" returnType="String">
+          <Argument type="Message" name="m"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="620.0" yPosition="20.0" package="com.ropr.beans" name="DeviceBean" visibility="public">
+      <Constructors/>
+      <Fields>
+        <Field name="selectedDevice" visibility="private" type="Device"/>
+        <Field name="contactList" visibility="private" type="List&lt;Contact&gt;"/>
+        <Field name="deviceDao" visibility="package" type="DeviceFacadeLocal"/>
+      </Fields>
+      <Methods>
+        <Method name="getContactList" visibility="public" returnType="List&lt;Contact&gt;"/>
+        <Method name="setContactList" visibility="public" returnType="void">
+          <Argument type="List&lt;Contact&gt;" name="contactList"/>
+        </Method>
+        <Method name="getSelectedDevice" visibility="public" returnType="Device"/>
+        <Method name="setSelectedDevice" visibility="public" returnType="void">
+          <Argument type="Device" name="selectedDevice"/>
+        </Method>
+        <Method name="update" visibility="public" returnType="void"/>
+      </Methods>
+    </Class>
+    <Class xPosition="920.0" yPosition="20.0" package="com.ropr.beans" name="EditUserBean" visibility="public">
+      <Constructors>
+        <Constructor name="EditUserBean" visibility="public"/>
+      </Constructors>
+      <Fields>
+        <Field name="user" visibility="private" type="User"/>
+        <Field name="emailA" visibility="private" type="String"/>
+        <Field name="userDao" visibility="package" type="UserFacadeLocal"/>
+        <Field name="deviceDao" visibility="package" type="DeviceFacadeLocal"/>
+      </Fields>
+      <Methods>
+        <Method name="getEmailA" visibility="public" returnType="String"/>
+        <Method name="setEmailA" visibility="public" returnType="void">
+          <Argument type="String" name="emailA"/>
+        </Method>
+        <Method name="getEmailB" visibility="public" returnType="String"/>
+        <Method name="setEmailB" visibility="public" returnType="void">
+          <Argument type="String" name="emailB"/>
+        </Method>
+        <Method name="getPassA" visibility="public" returnType="String"/>
+        <Method name="setPassA" visibility="public" returnType="void">
+          <Argument type="String" name="passA"/>
+        </Method>
+        <Method name="getPassB" visibility="public" returnType="String"/>
+        <Method name="setPassB" visibility="public" returnType="void">
+          <Argument type="String" name="passB"/>
+        </Method>
+        <Method name="getName" visibility="public" returnType="String"/>
+        <Method name="setName" visibility="public" returnType="void">
+          <Argument type="String" name="name"/>
+        </Method>
+        <Method name="getSurname" visibility="public" returnType="String"/>
+        <Method name="setSurname" visibility="public" returnType="void">
+          <Argument type="String" name="surname"/>
+        </Method>
+        <Method name="editUser" visibility="public" returnType="String"/>
+        <Method name="unsignDevice" visibility="public" returnType="String">
+          <Argument type="Device" name="device"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="20.0" yPosition="420.0" package="com.ropr.beans" name="LoginBean" visibility="public">
+      <Constructors/>
+      <Fields>
+        <Field name="email" visibility="private" type="String"/>
+        <Field name="password" visibility="private" type="String"/>
+        <Field name="current" visibility="private" type="User"/>
+        <Field name="userDao" visibility="private" type="UserFacadeLocal"/>
+      </Fields>
+      <Methods>
+        <Method name="getCurrent" visibility="public" returnType="User"/>
+        <Method name="login" visibility="public" returnType="String"/>
+        <Method name="logout" visibility="public" returnType="String"/>
+        <Method name="isLoggedIn" visibility="public" returnType="boolean"/>
+        <Method name="getEmail" visibility="public" returnType="String"/>
+        <Method name="setEmail" visibility="public" returnType="void">
+          <Argument type="String" name="email"/>
+        </Method>
+        <Method name="getPassword" visibility="public" returnType="String"/>
+        <Method name="setPassword" visibility="public" returnType="void">
+          <Argument type="String" name="password"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="320.0" yPosition="420.0" package="com.ropr.beans" name="NewContactBean" visibility="public">
+      <Constructors/>
+      <Fields>
+        <Field name="name" visibility="private" type="String"/>
+        <Field name="number" visibility="package" type="String"/>
+        <Field name="selectedDevice" visibility="private" type="Device"/>
+        <Field name="contactDao" visibility="package" type="ContactFacadeLocal"/>
+        <Field name="phoneDao" visibility="package" type="PhonenumberFacadeLocal"/>
+        <Field name="userDao" visibility="package" type="UserFacadeLocal"/>
+        <Field name="deviceDao" visibility="package" type="DeviceFacadeLocal"/>
+      </Fields>
+      <Methods>
+        <Method name="getSelectedDevice" visibility="public" returnType="Device"/>
+        <Method name="setSelectedDevice" visibility="public" returnType="void">
+          <Argument type="Device" name="selectedDevice"/>
+        </Method>
+        <Method name="getName" visibility="public" returnType="String"/>
+        <Method name="setName" visibility="public" returnType="void">
+          <Argument type="String" name="name"/>
+        </Method>
+        <Method name="getSurname" visibility="public" returnType="String"/>
+        <Method name="setSurname" visibility="public" returnType="void">
+          <Argument type="String" name="surname"/>
+        </Method>
+        <Method name="getNickname" visibility="public" returnType="String"/>
+        <Method name="setNickname" visibility="public" returnType="void">
+          <Argument type="String" name="nickname"/>
+        </Method>
+        <Method name="getEmail" visibility="public" returnType="String"/>
+        <Method name="setEmail" visibility="public" returnType="void">
+          <Argument type="String" name="email"/>
+        </Method>
+        <Method name="getNumber" visibility="public" returnType="String"/>
+        <Method name="setNumber" visibility="public" returnType="void">
+          <Argument type="String" name="number"/>
+        </Method>
+        <Method name="addContact" visibility="public" returnType="String">
+          <Argument type="User" name="user"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="620.0" yPosition="420.0" package="com.ropr.beans" name="NewDeviceBean" visibility="public">
+      <Constructors/>
+      <Fields>
+        <Field name="facesContext" visibility="package" type="FacesContext"/>
+        <Field name="number" visibility="private" type="String"/>
+        <Field name="device" visibility="private" type="Device"/>
+        <Field name="deviceDao" visibility="package" type="DeviceFacadeLocal"/>
+        <Field name="userDao" visibility="package" type="UserFacadeLocal"/>
+        <Field name="phoneDao" visibility="package" type="PhonenumberFacadeLocal"/>
+      </Fields>
+      <Methods>
+        <Method name="getNumber" visibility="public" returnType="String"/>
+        <Method name="setNumber" visibility="public" returnType="void">
+          <Argument type="String" name="number"/>
+        </Method>
+        <Method name="assignDevice" visibility="public" returnType="String">
+          <Argument type="User" name="user"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="920.0" yPosition="420.0" package="com.ropr.beans" name="PhoneBean" visibility="public">
+      <Constructors/>
+      <Fields>
+        <Field name="number" visibility="private" type="int"/>
+        <Field name="phoneDao" visibility="package" type="PhonenumberFacadeLocal"/>
+        <Field name="deviceDao" visibility="package" type="DeviceFacadeLocal"/>
+        <Field name="userDao" visibility="package" type="UserFacadeLocal"/>
+      </Fields>
+      <Methods>
+        <Method name="assignNumber" visibility="public" returnType="String">
+          <Argument type="String" name="email"/>
+        </Method>
+        <Method name="getNumber" visibility="public" returnType="int"/>
+        <Method name="setNumber" visibility="public" returnType="void">
+          <Argument type="int" name="number"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="20.0" yPosition="820.0" package="com.ropr.beans" name="RegisterBean" visibility="public">
+      <Constructors>
+        <Constructor name="RegisterBean" visibility="public"/>
+      </Constructors>
+      <Fields>
+        <Field name="mail" visibility="private" type="Mail"/>
+        <Field name="emailA" visibility="private" type="String"/>
+        <Field name="emailB" visibility="private" type="String"/>
+        <Field name="passwordA" visibility="private" type="String"/>
+        <Field name="passwordB" visibility="private" type="String"/>
+        <Field name="name" visibility="private" type="String"/>
+        <Field name="surname" visibility="private" type="String"/>
+        <Field name="userDao" visibility="private" type="UserFacadeLocal"/>
+      </Fields>
+      <Methods>
+        <Method name="register" visibility="public" returnType="String"/>
+        <Method name="prepAdd" visibility="private" returnType="User"/>
+        <Method name="getEmailA" visibility="public" returnType="String"/>
+        <Method name="setEmailA" visibility="public" returnType="void">
+          <Argument type="String" name="emailA"/>
+        </Method>
+        <Method name="getEmailB" visibility="public" returnType="String"/>
+        <Method name="setEmailB" visibility="public" returnType="void">
+          <Argument type="String" name="emailB"/>
+        </Method>
+        <Method name="getPasswordA" visibility="public" returnType="String"/>
+        <Method name="setPasswordA" visibility="public" returnType="void">
+          <Argument type="String" name="passwordA"/>
+        </Method>
+        <Method name="getPasswordB" visibility="public" returnType="String"/>
+        <Method name="setPasswordB" visibility="public" returnType="void">
+          <Argument type="String" name="passwordB"/>
+        </Method>
+        <Method name="getName" visibility="public" returnType="String"/>
+        <Method name="setName" visibility="public" returnType="void">
+          <Argument type="String" name="name"/>
+        </Method>
+        <Method name="getSurname" visibility="public" returnType="String"/>
+        <Method name="setSurname" visibility="public" returnType="void">
+          <Argument type="String" name="surname"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="320.0" yPosition="820.0" package="com.ropr.beans" name="UserPageBean" visibility="public">
+      <Constructors/>
+      <Fields>
+        <Field name="serialVersionUID" visibility="private" type="long" isStatic="true" isFinal="true"/>
+        <Field name="userDao" visibility="package" type="UserFacadeLocal"/>
+        <Field name="current" visibility="private" type="User"/>
+        <Field name="deviceList" visibility="private" type="List&lt;Device&gt;"/>
+        <Field name="facesContext" visibility="private" type="FacesContext" isFinal="true"/>
+      </Fields>
+      <Methods>
+        <Method name="init" visibility="public" returnType="void"/>
+        <Method name="getCurrent" visibility="public" returnType="User"/>
+        <Method name="setCurrent" visibility="public" returnType="void">
+          <Argument type="User" name="current"/>
+        </Method>
+        <Method name="getDeviceList" visibility="public" returnType="List&lt;Device&gt;"/>
+        <Method name="getDevNumber" visibility="public" returnType="Phonenumber">
+          <Argument type="Device" name="d"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="620.0" yPosition="820.0" package="com.ropr.beans" name="WebSocketBean" visibility="public">
+      <Constructors/>
+      <Fields>
+        <Field name="message" visibility="private" type="String"/>
+      </Fields>
+      <Methods>
+        <Method name="getMessage" visibility="public" returnType="String"/>
+        <Method name="setMessage" visibility="public" returnType="void">
+          <Argument type="String" name="message"/>
+        </Method>
+      </Methods>
+    </Class>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations/>
+</ClassDiagram>

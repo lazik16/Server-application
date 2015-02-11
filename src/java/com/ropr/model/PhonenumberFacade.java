@@ -7,6 +7,7 @@ package com.ropr.model;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 /**
@@ -30,7 +31,11 @@ public class PhonenumberFacade extends AbstractFacade<Phonenumber> implements Ph
     @Override
     public Phonenumber findByNumber(String number){
         Phonenumber phone;
+        try{
         phone = (Phonenumber)em.createNamedQuery("Phonenumber.findByNumber").setParameter("number", number).getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
         return phone;
     }
     

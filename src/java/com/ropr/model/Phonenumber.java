@@ -5,6 +5,7 @@
  */
 package com.ropr.model;
 
+import com.google.gson.annotations.Expose;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -42,6 +43,7 @@ public class Phonenumber implements Serializable {
     @Column(name = "idPhone")
     private Integer idPhone;
     @Basic(optional = false)
+    @Expose
     @NotNull
     @Size(min = 1, max = 42)
     @Column(name = "number")

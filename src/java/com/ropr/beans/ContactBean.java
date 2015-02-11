@@ -7,16 +7,18 @@ package com.ropr.beans;
 
 import com.ropr.model.Contact;
 import com.ropr.model.ContactFacadeLocal;
-import com.ropr.model.Device;
-import com.ropr.model.Phonenumber;
-import com.ropr.model.PhonenumberFacadeLocal;
-import com.ropr.model.User;
+import com.ropr.model.Message;
+import com.ropr.model.MessageFacadeLocal;
+import com.ropr.sync.Daemon;
+import com.ropr.utility.StaticVariables;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.application.FacesMessage;
 
 /**
  *
@@ -26,86 +28,113 @@ import javax.faces.application.FacesMessage;
 @ViewScoped
 public class ContactBean implements Serializable {
 
-    private String name, surname, nickname, email;
-    String number;
-    private Device selectedDevice;
+    private String text;
+    private Contact selectedContact;
+    private List<Message> messageList;
+    private final FacesContext facesContext = FacesContext.getCurrentInstance();
     
-    
-
-    public Device getSelectedDevice() {
-        return selectedDevice;
-    }
-
-    public void setSelectedDevice(Device selectedDevice) {
-        this.selectedDevice = selectedDevice;
-    }
 
     @EJB
     ContactFacadeLocal contactDao;
     @EJB
-    PhonenumberFacadeLocal phoneDao;
-    
-    public String getName() {
-        return name;
+    MessageFacadeLocal messageDao;
+    @EJB
+    Daemon daemon;
+
+    public List<Message> getMessageList() {
+        return messageList;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setMessageList(List<Message> messageList) {
+        this.messageList = messageList;
     }
 
-    public String getSurname() {
-        return surname;
+    public Contact getSelectedContact() {
+        return selectedContact;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setSelectedContact(Contact selectedContact) {
+        this.selectedContact = selectedContact;
     }
 
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-    public String addContact(User user) {
-        if (selectedDevice != null) {
-            Contact c = new Contact();
-            c.setEmail(email);
-            c.setFirstName(name);
-            c.setLastName(surname);
-            c.setNick(nickname);
-            c.setDeviceid(selectedDevice);
-            
-            Phonenumber p = new Phonenumber();
-            p.setNumber(number);
-            
-            phoneDao.create(p);
-            
-            p = phoneDao.findByNumber(number);
-            c.setPhonenumberid(p);
-            
-            contactDao.create(c);
-            return "/restricted/userhome?faces-redirect=true";
+    public String getRealSender(Message m) {
+        if (m != null) {
+            if (m.getSender().equals(m.getContactidContact().getPhonenumberid().getNumber())) {
+                return m.getContactidContact().getNick();
+            } else {
+                return "Vás";
+            }
         }
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Musíte vybrat zařízení"));
-        return "/restricted/newContact?faces-redirect=false";
+        return null;
+    }
+
+    public String getRealReceiver(Message m) {
+        if (m != null) {
+            if (m.getReciever().equals(m.getContactidContact().getPhonenumberid().getNumber())) {
+                return m.getContactidContact().getNick();
+            } else {
+                return "Vás";
+            }
+        }
+        return "";
+    }
+
+    public String getPrintoutNick() {
+        return selectedContact == null ? "None" : selectedContact.getNick();
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void update() {
+        if (selectedContact != null) {
+            this.messageList = contactDao.findByPhone(selectedContact.getPhonenumberid()).getMessageList();
+        }
+        this.messageList = messageList.subList(0, messageList.size() / 2);
+    }
+
+    public void send() {
+        //Message m = new Message();
+
+        if (selectedContact == null) {
+            facesContext.addMessage(null, new FacesMessage("Vyberte kontakt, kterému chcete psát."));
+        }
+        if (text != null && text.equals("")) {
+            facesContext.addMessage(null, new FacesMessage("Nic jste nenapsal/a."));
+        }
+        /*
+        m.setText(text);
+        m.setContactidContact(selectedContact);
+        m.setSender(selectedContact.getDeviceid().getPhonenumberId().getNumber());
+        m.setReciever(selectedContact.getPhonenumberid().getNumber());
+        m.setSendTime(new Date());
+        */
+        if (messageList == null) {
+            messageList = new ArrayList<>();
+        }
+        
+        Message m = daemon.sendMessage(text, selectedContact);
+        messageList.add(m);
+        messageDao.create(m);
+
+        selectedContact.setMessageList(messageList);
+        text = "";
+    }
+
+    public String getStyle(Message m) {
+        String textAlign = "leftie";
+        if (m != null) {
+            if (m.getSender().equals(m.getContactidContact().getDeviceid().getPhonenumberId().getNumber())) {
+                textAlign = "rightie";
+            } else {
+                textAlign = "leftie";
+            }
+        }
+        return textAlign;
     }
 }

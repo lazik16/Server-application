@@ -29,4 +29,9 @@ public interface ContactFacadeLocal {
 
     int count();
     
+    Contact findByNick(String nick);
+    
+    Contact findByPhone(Phonenumber phone);
+    
+    
 }

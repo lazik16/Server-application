@@ -23,14 +23,6 @@
     text-align: center;
 }
 
-#wrapper{
-    position: relative;
-    color: white;
-    margin: auto;
-    height: auto;
-    width: auto;
-}
-
 #left {
     position: relative;
     color: white;
@@ -38,10 +30,14 @@
     width: 200px;
     background-color: rgb(93,93,93);
     float: left;
-    min-height: 400px;
-    height: max-content;
+    min-height: 500px;
+    height: auto;
     padding-left: 20px;
     padding-top: 10px;
+}
+
+#ctList{
+    width: 170px;
 }
 
 #content{
@@ -50,8 +46,8 @@
     margin-left: 220px;
     margin-right: auto;
     width: 600px;
-    min-height: 400px;
-    height: max-content;
+    min-height: 500px;
+    height: auto;
 }
 
 #chatBox{
@@ -82,6 +78,22 @@
     color: black;
     font-weight : bold;
     text-decoration : underline;
+}
+
+#login{
+    position: relative;
+    color: white;
+    margin-left: auto; 
+    margin-right: auto; 
+    padding-left: 10px; 
+    padding-right: 10px; 
+    height: 200px;
+    width: 350px;
+    
+    background-color: rgb(93,93,93);
+    -moz-border-radius: 0 25px 0 25px;
+    -webkit-border-radius: 0 25px 0 25px;
+    border-radius: 0 25px 0 25px;
 }
 
 

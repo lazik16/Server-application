@@ -16,26 +16,26 @@
                     <h:panelGroup>
                         <h:panelGrid>
                             Jméno 
-                            <h:panelGroup><h:inputText id="name" size="35" value="#{contact.name}" required="false" requiredMessage="Zadejte jméno"/> <h:message id="namVal" for="name" style="color:red"/></h:panelGroup>
+                            <h:panelGroup><h:inputText id="name" size="35" value="#{newContact.name}" required="false" requiredMessage="Zadejte jméno"/> <h:message id="namVal" for="name" style="color:red"/></h:panelGroup>
                             Příjmení 
-                            <h:panelGroup><h:inputText id="surname" size="35" value="#{contact.surname}" required="false" requiredMessage="Zadejte příjmení"/> <h:message id="surVal" for="surname" style="color:red"/></h:panelGroup>
+                            <h:panelGroup><h:inputText id="surname" size="35" value="#{newContact.surname}" required="false" requiredMessage="Zadejte příjmení"/> <h:message id="surVal" for="surname" style="color:red"/></h:panelGroup>
                             Přezdívka 
-                            <h:panelGroup><h:inputText id="nick" size="35" value="#{contact.nickname}" required="true" requiredMessage="Pojmenujte nový kontakt"/> <h:message id="emaVal" for="nick" style="color:red"/></h:panelGroup>
+                            <h:panelGroup><h:inputText id="nick" size="35" value="#{newContact.nickname}" required="true" requiredMessage="Pojmenujte nový kontakt"/> <h:message id="emaVal" for="nick" style="color:red"/></h:panelGroup>
                             Email
-                            <h:panelGroup><h:inputText id="email" size="35" value="#{contact.email}" required="false" requiredMessage="Zadejte email"/> <h:message id="embVal" for="email" style="color:red"/></h:panelGroup>
+                            <h:panelGroup><h:inputText id="email" size="35" value="#{newContact.email}" required="false" requiredMessage="Zadejte email"/> <h:message id="embVal" for="email" style="color:red"/></h:panelGroup>
                             Tel. číslo 
-                            <h:panelGroup><h:inputText id="number" size="35" value="#{contact.number}" required="true" requiredMessage="Zadejte tel. číslo"/> <h:message id="paaVal" for="number" style="color:red"/></h:panelGroup>
+                            <h:panelGroup><h:inputText id="number" size="35" value="#{newContact.number}" required="true" requiredMessage="Zadejte tel. číslo"/> <h:message id="paaVal" for="number" style="color:red"/></h:panelGroup>
                             
                             <h:panelGroup>
-                                <h:commandButton id="regBtn" value="Uložit" action="#{contact.addContact(userpage.current)}"/>
+                                <p:commandButton id="regBtn" value="Uložit" action="#{newContact.addContact(userpage.current)}"/>
                                 <form>
-                                    <h:commandButton id="backBtn" immediate="true" value="Zpět" action="/restricted/userhome"/>
+                                    <p:commandButton id="backBtn" immediate="true" value="Zpět" action="/restricted/userhome"/>
                                 </form>
                             </h:panelGroup>
                         </h:panelGrid>
                         <h:panelGrid>
                             Zařízení:
-                            <p:selectOneMenu id="deviceSelector" value="#{contact.selectedDevice}" converter="entityConverter">
+                            <p:selectOneMenu id="deviceSelector" value="#{newContact.selectedDevice}" converter="entityConverter">
                                 <f:selectItems value="#{userpage.deviceList}" var="dev"
                                                itemLabel="#{dev.phonenumberId.number}"
                                                itemValue="#{dev}"/>

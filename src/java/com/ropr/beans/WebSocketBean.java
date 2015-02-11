@@ -5,6 +5,7 @@
  */
 package com.ropr.beans;
 
+import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
@@ -15,7 +16,7 @@ import javax.faces.bean.ViewScoped;
 
 @ManagedBean
 @ViewScoped
-public class WebSocketBean {
+public class WebSocketBean implements Serializable{
     private String message;
 
     public String getMessage() {

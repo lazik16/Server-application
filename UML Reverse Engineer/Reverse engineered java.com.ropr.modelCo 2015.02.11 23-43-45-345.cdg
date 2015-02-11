@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="Reverse engineered java.com.ropr.modelCo 2015.02.11 23-43-45-345">
+  <ClassDiagramComponents>
+    <Class xPosition="20.0" yPosition="20.0" package="com.ropr.modelCo" name="ContactCo" visibility="public">
+      <Constructors>
+        <Constructor name="ContactCo" visibility="public">
+          <Argument type="Contact" name="c"/>
+        </Constructor>
+        <Constructor name="ContactCo" visibility="public"/>
+      </Constructors>
+      <Fields>
+        <Field name="firstName" visibility="private" type="String"/>
+        <Field name="lastName" visibility="private" type="String"/>
+        <Field name="nick" visibility="private" type="String"/>
+        <Field name="email" visibility="private" type="String"/>
+        <Field name="phonenumberid" visibility="private" type="String"/>
+      </Fields>
+      <Methods>
+        <Method name="getFirstName" visibility="public" returnType="String"/>
+        <Method name="setFirstName" visibility="public" returnType="void">
+          <Argument type="String" name="firstName"/>
+        </Method>
+        <Method name="getLastName" visibility="public" returnType="String"/>
+        <Method name="setLastName" visibility="public" returnType="void">
+          <Argument type="String" name="lastName"/>
+        </Method>
+        <Method name="getNick" visibility="public" returnType="String"/>
+        <Method name="setNick" visibility="public" returnType="void">
+          <Argument type="String" name="nick"/>
+        </Method>
+        <Method name="getEmail" visibility="public" returnType="String"/>
+        <Method name="setEmail" visibility="public" returnType="void">
+          <Argument type="String" name="email"/>
+        </Method>
+        <Method name="getPhonenumberid" visibility="public" returnType="String"/>
+        <Method name="setPhonenumberid" visibility="public" returnType="void">
+          <Argument type="String" name="phonenumberid"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="320.0" yPosition="20.0" package="com.ropr.modelCo" name="DeviceCo" visibility="public">
+      <Constructors>
+        <Constructor name="DeviceCo" visibility="public">
+          <Argument type="Device" name="d"/>
+        </Constructor>
+        <Constructor name="DeviceCo" visibility="public"/>
+      </Constructors>
+      <Fields>
+        <Field name="phone" visibility="private" type="String"/>
+      </Fields>
+      <Methods>
+        <Method name="getPhonenumberId" visibility="public" returnType="String"/>
+        <Method name="setPhonenumberId" visibility="public" returnType="void">
+          <Argument type="String" name="phonenumberId"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="620.0" yPosition="20.0" package="com.ropr.modelCo" name="JSONBroker" visibility="public">
+      <Constructors>
+        <Constructor name="JSONBroker" visibility="public"/>
+      </Constructors>
+      <Fields>
+        <Field name="GSON" visibility="private" type="Gson" isFinal="true"/>
+      </Fields>
+      <Methods>
+        <Method name="messageToJson" visibility="public" returnType="String">
+          <Argument type="MsgPack" name="pack"/>
+        </Method>
+        <Method name="contactToJson" visibility="public" returnType="String">
+          <Argument type="MsgPack" name="pack"/>
+        </Method>
+        <Method name="deviceToJson" visibility="public" returnType="String">
+          <Argument type="MsgPack" name="pack"/>
+        </Method>
+        <Method name="extractObject" visibility="public" returnType="MsgPack">
+          <Argument type="String" name="json"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="920.0" yPosition="20.0" package="com.ropr.modelCo" name="MessageCo" visibility="public">
+      <Constructors>
+        <Constructor name="MessageCo" visibility="public">
+          <Argument type="Message" name="m"/>
+        </Constructor>
+        <Constructor name="MessageCo" visibility="public"/>
+      </Constructors>
+      <Fields>
+        <Field name="text" visibility="private" type="String"/>
+        <Field name="reciever" visibility="private" type="String"/>
+        <Field name="sendTime" visibility="private" type="Date"/>
+        <Field name="sender" visibility="private" type="String"/>
+      </Fields>
+      <Methods>
+        <Method name="getText" visibility="public" returnType="String"/>
+        <Method name="setText" visibility="public" returnType="void">
+          <Argument type="String" name="text"/>
+        </Method>
+        <Method name="getReciever" visibility="public" returnType="String"/>
+        <Method name="setReciever" visibility="public" returnType="void">
+          <Argument type="String" name="reciever"/>
+        </Method>
+        <Method name="getSendTime" visibility="public" returnType="Date"/>
+        <Method name="setSendTime" visibility="public" returnType="void">
+          <Argument type="Date" name="sendTime"/>
+        </Method>
+        <Method name="getSender" visibility="public" returnType="String"/>
+        <Method name="setSender" visibility="public" returnType="void">
+          <Argument type="String" name="sender"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="20.0" yPosition="420.0" package="com.ropr.modelCo" name="MsgPack" visibility="public">
+      <Constructors/>
+      <Fields>
+        <Field name="action" visibility="private" type="ActionType"/>
+        <Field name="objectType" visibility="private" type="ObjectType"/>
+        <Field name="object" visibility="private" type="T"/>
+        <Field name="hash" visibility="private" type="int"/>
+      </Fields>
+      <Methods>
+        <Method name="getObject" visibility="public" returnType="T"/>
+        <Method name="setObject" visibility="public" returnType="void">
+          <Argument type="T" name="object"/>
+        </Method>
+        <Method name="getHash" visibility="public" returnType="int"/>
+        <Method name="setHash" visibility="public" returnType="void">
+          <Argument type="int" name="hash"/>
+        </Method>
+        <Method name="getAction" visibility="public" returnType="ActionType"/>
+        <Method name="setAction" visibility="public" returnType="void">
+          <Argument type="ActionType" name="action"/>
+        </Method>
+        <Method name="getObjectType" visibility="public" returnType="ObjectType"/>
+        <Method name="setObjectType" visibility="public" returnType="void">
+          <Argument type="ObjectType" name="objectType"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="320.0" yPosition="420.0" package="com.ropr.modelCo" name="ObjectFactory" visibility="public">
+      <Constructors/>
+      <Fields/>
+      <Methods>
+        <Method name="createContact" visibility="public" returnType="ContactCo">
+          <Argument type="String" name="email"/>
+          <Argument type="String" name="firstName"/>
+          <Argument type="String" name="lastName"/>
+          <Argument type="String" name="nick"/>
+          <Argument type="String" name="phone"/>
+        </Method>
+        <Method name="createContact" visibility="public" returnType="ContactCo">
+          <Argument type="Contact" name="c"/>
+        </Method>
+        <Method name="createDevice" visibility="public" returnType="DeviceCo">
+          <Argument type="String" name="phone"/>
+        </Method>
+        <Method name="createDevice" visibility="public" returnType="DeviceCo">
+          <Argument type="Device" name="d"/>
+        </Method>
+        <Method name="createMessage" visibility="public" returnType="MessageCo">
+          <Argument type="String" name="reciever"/>
+          <Argument type="String" name="sender"/>
+          <Argument type="String" name="text"/>
+          <Argument type="Date" name="sendTime"/>
+        </Method>
+        <Method name="createMessage" visibility="public" returnType="MessageCo">
+          <Argument type="Message" name="m"/>
+        </Method>
+        <Method name="createMsgPack" visibility="public" returnType="MsgPack">
+          <Argument type="T" name="object"/>
+          <Argument type="int" name="hash"/>
+          <Argument type="ActionType" name="type"/>
+          <Argument type="ObjectType" name="type2"/>
+        </Method>
+      </Methods>
+    </Class>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <UseRelation source="ObjectFactory" target="MsgPack" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="ObjectFactory" target="DeviceCo" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="ObjectFactory" target="ContactCo" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="ObjectFactory" target="MessageCo" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="JSONBroker" target="MsgPack" sourceCardinality="1..1" targetCardinality="1..1"/>
+  </ClassDiagramRelations>
+</ClassDiagram>

@@ -5,6 +5,10 @@
  */
 package com.ropr.model;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -48,24 +52,33 @@ public class Message implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Lob
+    @Expose
     @Size(min = 1, max = 65535)
     @Column(name = "text")
     private String text;
     @Basic(optional = false)
     @NotNull
+    @Expose
+    @SerializedName("to")
     @Size(min = 1, max = 42)
     @Column(name = "reciever")
     private String reciever;
     @Basic(optional = false)
     @NotNull
+    @Expose
+    @SerializedName("time")
     @Column(name = "sendTime")
     @Temporal(TemporalType.TIMESTAMP)
     private Date sendTime;
     @Basic(optional = false)
     @NotNull
+    @Expose
+    @SerializedName("from")
     @Size(min = 1, max = 42)
     @Column(name = "sender")
     private String sender;
+    @Expose
+    @SerializedName("contact")
     @JoinColumn(name = "Contact_idContact", referencedColumnName = "idContact")
     @ManyToOne(optional = false)
     private Contact contactidContact;
@@ -151,6 +164,22 @@ public class Message implements Serializable {
             return false;
         }
         return true;
+    }
+    
+    public String toJSON(){
+        final GsonBuilder builder = new GsonBuilder();
+        builder.excludeFieldsWithoutExposeAnnotation();
+        final Gson gson = builder.create();
+        String json = gson.toJson(this);
+        return json;
+    }
+    
+    public static Message fromJSON(String json){
+        final GsonBuilder builder = new GsonBuilder();
+        builder.excludeFieldsWithoutExposeAnnotation();
+        final Gson gson = builder.create();
+        Message u = gson.fromJson(json, Message.class);
+        return u;
     }
 
     @Override

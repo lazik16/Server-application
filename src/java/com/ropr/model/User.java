@@ -7,6 +7,8 @@ package com.ropr.model;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -47,20 +49,25 @@ public class User implements Serializable, Comparable<User>{
     @Column(name = "idUser")
     private Integer idUser;
     @Size(max = 45)
+    @Expose
     @Column(name = "name")
     private String name;
     @Size(max = 45)
+    @Expose
     @Column(name = "surname")
     private String surname;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Basic(optional = false)
     @NotNull
+    @Expose
     @Size(min = 1, max = 45)
     @Column(name = "email")
     private String email;
     @Basic(optional = false)
     @NotNull
+    @Expose
     @Size(min = 1, max = 45)
+    @SerializedName("pass")
     @Column(name = "password")
     private String password;
     @ManyToMany(mappedBy = "userList", fetch = FetchType.EAGER)

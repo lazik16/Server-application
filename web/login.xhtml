@@ -15,8 +15,8 @@
             </ui:define>
 
             <ui:define name="content">
-                <div class="login">
-                    <h2>Přihlaste se</h2>
+                <div id="login">
+                    <h1>Přihlášení uživatele</h1>
                     <f:view>
                         <h:form>
                             <h:panelGrid>
@@ -25,15 +25,15 @@
                                                            requiredMessage="Zadejte email">
                                         <f:validator validatorId="emailValidator" />
                                     </p:inputText>
-                                    <h:message id="m2b" for="email" style="color:red"/>
+                                    <p:message id="m2b" for="email"/>
                                 </h:panelGroup>
                                 Heslo 
                                 <h:panelGroup>
                                     <p:password id="pass" value="#{login.password}" size="50" required="true" requiredMessage="Zadejte heslo"/>
-                                    <h:message id="m2a" for="pass" style="color:red"/>
+                                    <p:message id="m2a" for="pass"/>
                                 </h:panelGroup>    
                                 <p:commandButton id="loginBtn" value="Přihlásit se" action="#{login.login()}" />
-                                <h:message id="m2c" for="loginBtn" style="color:red"/>
+                                <p:message id="m2c" for="loginBtn"/>
                             </h:panelGrid>
                         </h:form>
                     </f:view>

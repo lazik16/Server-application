@@ -7,7 +7,7 @@
     margin: 0px 0px 10px 0px;
     margin-left: auto;
     margin-right: auto;
-    width: 80%;
+    width: auto;
 }
 
 #bottom {
@@ -15,9 +15,7 @@
     background-color: #c2dfef;
     padding: 5px;
     margin: 10px 0px 0px 0px;
-    margin-left: auto;
-    margin-right: auto;
-    width: 80%;
+    width: auto;
 }
 
 #bottomText{
@@ -48,10 +46,6 @@
     min-height: 300px;
 }
 
-#content{
-
-}
-
 .left_content {
     background-color: #dddddd;
     padding: 5px;
@@ -76,18 +70,12 @@
     text-decoration : underline;
 }
 
-.login{
-    position: relative;
-    color: white;
-    margin: auto;
-    padding: 30px; 
-    height: 150px;
-    width: 350px;
-    background-color: rgb(93,93,93);
-}
-
 #loginBtn{
     position: relative;
+}
+
+#contacList{
+    text-align: center;
 }
 
 

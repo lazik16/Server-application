@@ -26,5 +26,9 @@ public class MessageFacade extends AbstractFacade<Message> implements MessageFac
     public MessageFacade() {
         super(Message.class);
     }
-    
+
+    @Override
+    public void create(Message entity) {
+        super.create(entity); //To change body of generated methods, choose Tools | Templates.
+    }
 }

@@ -9,13 +9,15 @@
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+    
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/faces/*</url-pattern>
     </servlet-mapping>
+    
     <session-config>
         <session-timeout>
-            30
+            600
         </session-timeout>
     </session-config>
     <welcome-file-list>
@@ -26,6 +28,7 @@
         <filter-name>ConnectionFilter</filter-name>
         <filter-class>com.ropr.filter.ConnectionFilter</filter-class>
     </filter>
+    
     <filter-mapping>
         <filter-name>ConnectionFilter</filter-name>
         <url-pattern>/faces/*</url-pattern>

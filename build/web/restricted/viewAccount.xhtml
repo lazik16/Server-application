@@ -58,11 +58,11 @@
                                     </h:panelGroup>
                                     <h4>Telefonní číslo</h4>
                                     <h:panelGroup>
-                                        <p:inputText id="number" size="35" value="#{device.number}" required="true" requiredMessage="Zadejte telefon"/>
+                                        <p:inputText id="number" size="35" value="#{newDevice.number}" required="true" requiredMessage="Zadejte telefon"/>
                                         <h:message id="numVal" for="name" style="color:red"/>
                                     </h:panelGroup>
                                     <h:panelGroup>
-                                        <p:commandButton value="Přidat" action="#{device.assignDevice(userpage.current)}" />
+                                        <p:commandButton value="Přidat" action="#{newDevice.assignDevice(userpage.current)}" />
                                     </h:panelGroup>
                                 </h:panelGrid>
                             </h:form>

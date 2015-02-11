@@ -5,6 +5,10 @@
  */
 package com.ropr.model;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -38,6 +42,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Device.findByPhone", query = "SELECT d FROM Device d WHERE d.phonenumberId = :phonenumberId"),
     @NamedQuery(name = "Device.findByIdDevice", query = "SELECT d FROM Device d WHERE d.idDevice = :idDevice")})
 public class Device implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "toDevice")
+    private List<Syncpoint> syncpointList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "toDevice")
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,6 +60,8 @@ public class Device implements Serializable {
     private List<Contact> contactList;
     @JoinColumn(name = "Phonenumber_Id", referencedColumnName = "idPhone")
     @ManyToOne(optional = false)
+    @Expose
+    @SerializedName("phone")
     private Phonenumber phonenumberId;
 
     public Device() {
@@ -115,10 +124,35 @@ public class Device implements Serializable {
         }
         return true;
     }
+    
+    public String toJSON(){
+        final GsonBuilder builder = new GsonBuilder();
+        builder.excludeFieldsWithoutExposeAnnotation();
+        final Gson gson = builder.create();
+        String json = gson.toJson(this);
+        return json;
+    }
+    
+    public static Device fromJSON(String json){
+        final GsonBuilder builder = new GsonBuilder();
+        builder.excludeFieldsWithoutExposeAnnotation();
+        final Gson gson = builder.create();
+        Device u = gson.fromJson(json, Device.class);
+        return u;
+    }
 
     @Override
     public String toString() {
         return "com.model.Device[ idDevice=" + idDevice + " ]";
+    }
+
+    @XmlTransient
+    public List<Syncpoint> getSyncpointList() {
+        return syncpointList;
+    }
+
+    public void setSyncpointList(List<Syncpoint> syncpointList) {
+        this.syncpointList = syncpointList;
     }
     
 }

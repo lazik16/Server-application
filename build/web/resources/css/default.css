@@ -3,7 +3,9 @@ body {
     font-size: 12px;
     font-family: Verdana, "Verdana CE",  Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
     color: #000000;  
-    margin: 10px;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 h1 {
@@ -17,11 +19,22 @@ h1 {
 }
 
 #cmdTable {
-    color: #00000;
+    color: #000000;
     background-color: #FFFFFF;
     border: 2px solid #683900;
     margin: 10px;
     border-spacing: 2px;
+}
+
+.contactNumber{
+    font-size: 11px;
+    text-align: center;
+}
+
+.contactNick{
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
 }
 
 #cmdTable thead{
@@ -39,4 +52,55 @@ a:link:hover, a:visited:hover  {
     color: #045491;
     font-weight : bold;
     text-decoration : underline;
+}
+
+
+.ui-datatable.borderless thead th,
+.ui-datatable.borderless tbody,
+.ui-datatable.borderless tbody tr,
+.ui-datatable.borderless tbody td {
+    border-style: none;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    margin-left: 3px;
+    margin-right: 3px;
+}
+.ui-datatable.roundTable table {
+    border-collapse: separate;
+    *border-collapse: collapse; /* Fallback for IE <=7. */
+    border-spacing: 0; 
+}
+.ui-datatable.roundTable table tr:first-child th:first-child {
+    -moz-border-radius: 6px 0 0 0; -webkit-border-radius: 6px 0 0 0; border-radius: 6px 0 0 0;
+}
+
+.msgHead{
+    font-size: 10px;
+}
+
+.rightie{
+    background-color: #ccccff;
+    width: 300px;
+    min-width: 200px;
+    height: auto;
+    float:right;
+    -moz-border-radius: 0 10px 0 10px;
+    -webkit-border-radius: 0 10px 0 10px;
+    border-radius: 0 10px 0 10px;
+
+}
+.leftie{
+    background-color: #ccffcc;
+    width: 300px;
+    min-width: 200px;
+    height: auto;
+    float: left;
+    -moz-border-radius: 10px 0 10px 0;
+    -webkit-border-radius: 10px 0 10px 0;
+    border-radius: 10px 0 10px 0;
+}
+
+.boldie{
+    font-size: 15px;
+    font-weight: bold;
 }

@@ -5,6 +5,10 @@
  */
 package com.ropr.model;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -38,6 +42,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Contact.findByIdContact", query = "SELECT c FROM Contact c WHERE c.idContact = :idContact"),
     @NamedQuery(name = "Contact.findByFirstName", query = "SELECT c FROM Contact c WHERE c.firstName = :firstName"),
     @NamedQuery(name = "Contact.findByLastName", query = "SELECT c FROM Contact c WHERE c.lastName = :lastName"),
+    @NamedQuery(name = "Contact.findByPhone", query = "SELECT c FROM Contact c WHERE c.phonenumberid.number = :number"),
     @NamedQuery(name = "Contact.findByNick", query = "SELECT c FROM Contact c WHERE c.nick = :nick"),
     @NamedQuery(name = "Contact.findByEmail", query = "SELECT c FROM Contact c WHERE c.email = :email")})
 public class Contact implements Serializable {
@@ -48,24 +53,32 @@ public class Contact implements Serializable {
     @Column(name = "idContact")
     private Integer idContact;
     @Size(max = 45)
+    @Expose
     @Column(name = "firstName")
     private String firstName;
     @Size(max = 45)
+    @Expose
     @Column(name = "lastName")
     private String lastName;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
+    @Expose
     @Column(name = "nick")
     private String nick;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Size(max = 45)
+    @Expose
     @Column(name = "email")
     private String email;
     @JoinColumn(name = "Device_id", referencedColumnName = "idDevice")
     @ManyToOne(optional = false)
+    @Expose
+    @SerializedName("device")
     private Device deviceid;
     @JoinColumn(name = "Phonenumber_id", referencedColumnName = "idPhone")
+    @Expose
+    @SerializedName("phone")
     @ManyToOne(optional = false)
     private Phonenumber phonenumberid;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "contactidContact", fetch = FetchType.EAGER)
@@ -157,7 +170,6 @@ public class Contact implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof Contact)) {
             return false;
         }
@@ -166,6 +178,22 @@ public class Contact implements Serializable {
             return false;
         }
         return true;
+    }
+    
+    public String toJSON(){
+        final GsonBuilder builder = new GsonBuilder();
+        builder.excludeFieldsWithoutExposeAnnotation();
+        final Gson gson = builder.create();
+        String json = gson.toJson(this);
+        return json;
+    }
+    
+    public static Contact fromJSON(String json){
+        final GsonBuilder builder = new GsonBuilder();
+        builder.excludeFieldsWithoutExposeAnnotation();
+        final Gson gson = builder.create();
+        Contact u = gson.fromJson(json, Contact.class);
+        return u;
     }
 
     @Override

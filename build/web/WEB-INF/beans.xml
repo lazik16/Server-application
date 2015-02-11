@@ -3,4 +3,10 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/beans_1_1.xsd"
        bean-discovery-mode="annotated">
+    
+    <managed-bean>
+        <managed-bean-name>contact</managed-bean-name>
+        <managed-bean-class>com.ropr.beans.ContactBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
 </beans>
