@@ -5,8 +5,6 @@
  */
 package com.ropr.utility;
 
-import com.ropr.sync.Daemon;
-
 /**
  *
  * @author Dominik

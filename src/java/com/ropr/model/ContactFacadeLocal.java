@@ -5,6 +5,7 @@
  */
 package com.ropr.model;
 
+import com.ropr.modelCo.ContactCo;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -20,18 +21,16 @@ public interface ContactFacadeLocal {
     void edit(Contact contact);
 
     void remove(Contact contact);
+    
+    String createCo(ContactCo contact);
 
-    Contact find(Object id);
-
+    String editCo(ContactCo contact);
+    
     List<Contact> findAll();
-
-    List<Contact> findRange(int[] range);
-
-    int count();
     
     Contact findByNick(String nick);
     
-    Contact findByPhone(Phonenumber phone);
+    Contact findByPhone(String phone, Device d);
     
     
 }

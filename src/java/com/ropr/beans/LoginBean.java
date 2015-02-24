@@ -23,6 +23,7 @@ import javax.faces.application.FacesMessage;
 @ManagedBean(name = "login")
 @SessionScoped
 public class LoginBean implements Serializable{
+    private static final long serialVersionUID = 1L;
     private String email;
     private String password;
     private User current;
@@ -39,11 +40,12 @@ public class LoginBean implements Serializable{
         current = userDao.findByEmail(email);
         if (current != null && !current.getPassword().equals(password)) {
             current = null;
-            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Chyba!","Špatné jméno nebo heslo"));
+            facesContext.addMessage(null, new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR, "Chyba!","Špatné jméno nebo heslo"));
         }
-        
         if (current == null) {
-            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Chyba!","Tento uživatel neexistuje"));
+            facesContext.addMessage(null, new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR, "Chyba!","Tento uživatel neexistuje"));
             return (email = password = null);
         } else {
             facesContext.getExternalContext().getSessionMap().put(
@@ -66,153 +68,6 @@ public class LoginBean implements Serializable{
         return FacesContext.getCurrentInstance().getExternalContext()
         .getSessionMap().get(StaticVariables.USER) != null;
     }
-    
-   
-    /*
-    private String email;
-    private String password;
-    private User current;
-    private String name;
-    private String surname;
-    private String passwordB;
-    private String emailB;
-
-    @EJB
-    private UserFacadeLocal userDao;
-
-    public String login() {
-        current = userDao.findByEmail(email);
-        if (current != null && !current.getPassword().equals(password)) {
-            current = null;
-        }
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        if (current == null) {
-            facesContext.addMessage(null, new FacesMessage("Tento uživatel neexistuje"));
-            return (email = password = null);
-        } else {
-            facesContext.getExternalContext().getSessionMap().put(
-            AUTH_KEY, email);
-            return "/restricted/userhome?faces-redirect=true";
-        }
-    }
-
-    public String logout() {
-        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-        .remove(AUTH_KEY);
-        return "/login?faces-redirect=true";
-    }
-
-    public boolean isLoggedIn() {
-        return FacesContext.getCurrentInstance().getExternalContext()
-        .getSessionMap().get(AUTH_KEY) != null;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getName() {
-        return current.getName();
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return current.getSurname();
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getPasswordB() {
-        return current.getPassword();
-    }
-
-    public void setPasswordB(String passwordB) {
-        this.passwordB = password;
-    }
-
-    public String getEmailB() {
-        return current.getEmail();
-    }
-
-    public void setEmailB(String emailB) {
-        this.emailB = emailB;
-    }
-
-    public List<Contact> getContacts() {
-        return null;
-    }
-    
-    public List<Phonenumber> getPhoneNumbers(){
-        return null;
-    }
-    
-    public void restoreBackup(User backup){
-        setEmail(backup.getEmail());
-        setName(backup.getName());
-        setSurname(backup.getSurname());
-        setPassword(backup.getPassword());
-    }
-
-    public User getCurrent() {
-        return current;
-    }
-
-    public void setCurrent(User current) {
-        this.current = current;
-    }
-    
-    public String edit(){
-        FacesContext fc = FacesContext.getCurrentInstance();
-        User backup = userDao.find(current.getIdUser());
-        restoreBackup(backup);
-        
-        if (!email.equals(emailB)) {
-            fc.addMessage(null, new FacesMessage("Emaily si neodpovídají"));
-            restoreBackup(backup);
-            return (email = emailB = null);
-        } else if (!password.equals(passwordB)) {
-            fc.addMessage(null, new FacesMessage("Hesla si neodpovídají"));
-            restoreBackup(backup);
-            return (password = passwordB = null);
-        }
-
-        User u = userDao.findByEmail(email);
-        if (u != null && !u.getIdUser().equals(current.getIdUser())) {
-            fc.addMessage(null, new FacesMessage("Uživatel s tímto emailem již existuje"));
-            restoreBackup(backup);
-            return (email = emailB = null);
-        }
-
-        userDao.edit(prepAdd());
-        return "/restricted/userhome?faces-redirect=true";  
-    }
-    
-    private User prepAdd(){
-        User toAdd = new User();
-        toAdd.setName(name);
-        toAdd.setSurname(surname);
-        toAdd.setEmail(email);
-        toAdd.setPassword(password);
-        return toAdd;
-    }*/
 
     public String getEmail() {
         return email;

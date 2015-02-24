@@ -22,7 +22,7 @@ import javax.faces.bean.ManagedBean;
 @ManagedBean(name = "register")
 @ViewScoped
 public class RegisterBean implements Serializable {
-
+    private static final long serialVersionUID = 1L;
     @EJB
     private Mail mail;
 
@@ -42,10 +42,10 @@ public class RegisterBean implements Serializable {
 
     public String register() {
         FacesContext fc = FacesContext.getCurrentInstance();
-        if (!emailA.equals(emailB)) {
+        if (emailA != null && emailB != null && !emailA.equals(emailB)) {
             fc.addMessage(null, new FacesMessage("Emaily si neodpovídají"));
             return (emailA = emailB = null);
-        } else if (!passwordA.equals(passwordB)) {
+        } else if (passwordA != null && passwordB != null && !passwordA.equals(passwordB)) {
             fc.addMessage(null, new FacesMessage("Hesla si neodpovídají"));
             return (passwordA = passwordB = null);
         }
@@ -57,10 +57,10 @@ public class RegisterBean implements Serializable {
         }
 
         userDao.create(prepAdd());
-        mail.send(emailA, "[APSYNC]Účet pro uživatele " + name + " " + surname + " vytvořen", 
+        mail.send(emailA, "[APSYNC]Účet pro uživatele " + name + " " + surname + " vytvořen",
                 "Váš účet byl úspěšně vytvořen s následujícími údaji:"
-                + "\n\nUživatelské jméno: "+emailA
-                + "\nHeslo: "+passwordA
+                + "\n\nUživatelské jméno: " + emailA
+                + "\nHeslo: " + passwordA
                 + "\n\nMůžete se přihlásit na: http://apsync.duckdns.org/ROPR/faces/login.xhtml");
         return "/registerSuccess?faces-redirect=true";
     }

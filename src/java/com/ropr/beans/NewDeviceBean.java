@@ -11,9 +11,7 @@ import com.ropr.model.User;
 import com.ropr.model.Phonenumber;
 import com.ropr.model.PhonenumberFacadeLocal;
 import com.ropr.model.UserFacadeLocal;
-import com.ropr.utility.StaticVariables;
 import java.io.Serializable;
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -23,16 +21,16 @@ import javax.faces.context.FacesContext;
 @ManagedBean(name = "newDevice")
 @ViewScoped
 public class NewDeviceBean implements Serializable{
-    FacesContext facesContext = FacesContext.getCurrentInstance();
+    private final FacesContext facesContext = FacesContext.getCurrentInstance();
     private String number;
     private Device device;
     
     @EJB
-    DeviceFacadeLocal deviceDao;
+    private DeviceFacadeLocal deviceDao;
     @EJB
-    UserFacadeLocal userDao;
+    private UserFacadeLocal userDao;
     @EJB
-    PhonenumberFacadeLocal phoneDao;
+    private PhonenumberFacadeLocal phoneDao;
 
     public String getNumber() {
         return number;
@@ -51,7 +49,7 @@ public class NewDeviceBean implements Serializable{
             return "/restricted/viewAccount?faces-redirect=false";
         }
         
-        device = deviceDao.findByPhone(phone);
+        device = deviceDao.findByPhone(phone.getNumber());
         if(device == null){
             facesContext.addMessage(null, new FacesMessage("Toto zařízení se nenachází v naší databázi."));
             return "/restricted/viewAccount?faces-redirect=false";

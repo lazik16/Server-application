@@ -4,6 +4,11 @@ import java.io.IOException;
 
 import javax.annotation.Resource;
 import javax.servlet.*;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
 public class ConnectionFilter implements Filter {
@@ -22,8 +27,8 @@ public class ConnectionFilter implements Filter {
    utx.begin();
    chain.doFilter(request, response);
    utx.commit();
-  } catch (Exception e) {
-   e.printStackTrace();
+  } catch (NotSupportedException | SystemException | IOException | ServletException | RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException e) {
+      e.printStackTrace();
   }
 
  }

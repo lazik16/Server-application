@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.ropr.modelCo.ContactCo;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -42,7 +43,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Contact.findByIdContact", query = "SELECT c FROM Contact c WHERE c.idContact = :idContact"),
     @NamedQuery(name = "Contact.findByFirstName", query = "SELECT c FROM Contact c WHERE c.firstName = :firstName"),
     @NamedQuery(name = "Contact.findByLastName", query = "SELECT c FROM Contact c WHERE c.lastName = :lastName"),
-    @NamedQuery(name = "Contact.findByPhone", query = "SELECT c FROM Contact c WHERE c.phonenumberid.number = :number"),
+    @NamedQuery(name = "Contact.findByPhone", query = "SELECT c FROM Contact c WHERE c.phonenumberid.number = :number AND c.deviceid = :device"),
     @NamedQuery(name = "Contact.findByNick", query = "SELECT c FROM Contact c WHERE c.nick = :nick"),
     @NamedQuery(name = "Contact.findByEmail", query = "SELECT c FROM Contact c WHERE c.email = :email")})
 public class Contact implements Serializable {
@@ -81,10 +82,19 @@ public class Contact implements Serializable {
     @SerializedName("phone")
     @ManyToOne(optional = false)
     private Phonenumber phonenumberid;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contactidContact", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "contactidContact", fetch = FetchType.EAGER)
     private List<Message> messageList;
 
     public Contact() {
+    }
+    
+    public Contact(ContactCo co) {
+        this.email = co.getEmail();
+        this.firstName = co.getFirstName();
+        this.lastName = co.getLastName();
+        this.nick = co.getNick();
+        this.phonenumberid = co.getRealNumber();
+        this.deviceid = co.getDevice();
     }
 
     public Contact(Integer idContact) {

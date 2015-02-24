@@ -21,10 +21,8 @@ import javax.faces.context.FacesContext;
 @ManagedBean(name = "userpage")
 @ViewScoped
 public class UserPageBean implements Serializable {
-    private static final long serialVersionUID = 1L;
-
     @EJB
-    UserFacadeLocal userDao;
+    private UserFacadeLocal userDao;
     private User current;
     private List<Device> deviceList;
     private final FacesContext facesContext = FacesContext.getCurrentInstance();

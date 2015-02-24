@@ -6,6 +6,7 @@
 package com.ropr.modelCo;
 
 import com.google.gson.annotations.Expose;
+import com.ropr.model.Contact;
 import com.ropr.model.Message;
 import java.util.Date;
 
@@ -22,6 +23,15 @@ public class MessageCo {
     private Date sendTime;
     @Expose
     private String sender;
+    private Contact contact;
+
+    public Contact getContact() {
+        return contact;
+    }
+
+    public void setContact(Contact contact) {
+        this.contact = contact;
+    }
     
     public MessageCo(Message m){
         text = m.getText();

@@ -7,6 +7,8 @@ package com.ropr.modelCo;
 
 import com.google.gson.annotations.Expose;
 import com.ropr.model.Contact;
+import com.ropr.model.Device;
+import com.ropr.model.Phonenumber;
 
 /**
  *
@@ -23,6 +25,24 @@ public class ContactCo {
     private String email;
     @Expose
     private String phonenumberid;
+    private Phonenumber realNumber;
+    private Device device;
+
+    public Phonenumber getRealNumber() {
+        return realNumber;
+    }
+
+    public void setRealNumber(Phonenumber realNumber) {
+        this.realNumber = realNumber;
+    }
+
+    public Device getDevice() {
+        return device;
+    }
+
+    public void setDevice(Device device) {
+        this.device = device;
+    }
 
     public ContactCo(Contact c) {
         this.firstName = c.getFirstName();

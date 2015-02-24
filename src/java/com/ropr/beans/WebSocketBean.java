@@ -17,6 +17,7 @@ import javax.faces.bean.ViewScoped;
 @ManagedBean
 @ViewScoped
 public class WebSocketBean implements Serializable{
+    private static final long serialVersionUID = 1L;
     private String message;
 
     public String getMessage() {

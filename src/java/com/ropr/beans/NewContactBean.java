@@ -13,6 +13,7 @@ import com.ropr.model.Phonenumber;
 import com.ropr.model.PhonenumberFacadeLocal;
 import com.ropr.model.User;
 import com.ropr.model.UserFacadeLocal;
+import com.ropr.sync.Daemon;
 import java.io.Serializable;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -27,9 +28,8 @@ import javax.faces.application.FacesMessage;
 @ManagedBean(name = "newContact")
 @ViewScoped
 public class NewContactBean implements Serializable {
-
-    private String name, surname, nickname, email;
-    String number;
+    private static final long serialVersionUID = 1L;
+    private String name, surname, nickname, email,number;
     private Device selectedDevice;
     
     public Device getSelectedDevice() {
@@ -41,13 +41,11 @@ public class NewContactBean implements Serializable {
     }
 
     @EJB
-    ContactFacadeLocal contactDao;
+    private ContactFacadeLocal contactDao;
     @EJB
-    PhonenumberFacadeLocal phoneDao;
+    private PhonenumberFacadeLocal phoneDao;
     @EJB
-    UserFacadeLocal userDao;
-    @EJB
-    DeviceFacadeLocal deviceDao;
+    private Daemon daemon;
     
     public String getName() {
         return name;
@@ -91,26 +89,14 @@ public class NewContactBean implements Serializable {
 
     public String addContact(User user) {
         if (selectedDevice != null) {
-            Contact c = new Contact();
-            c.setEmail(email);
-            c.setFirstName(name);
-            c.setLastName(surname);
-            c.setNick(nickname);
-            c.setDeviceid(selectedDevice);
-            
             Phonenumber p = new Phonenumber();
             p.setNumber(number);
-            
             phoneDao.create(p);
-            
             p = phoneDao.findByNumber(number);
-            c.setPhonenumberid(p);
             
+            Contact c = daemon.sendContact(email,name,surname,nickname,p,selectedDevice);
             contactDao.create(c);
-            //c = contactDao.findByNick(c.getNick());
             selectedDevice.getContactList().add(c);
-            //deviceDao.edit(selectedDevice);
-            
             return "/restricted/userhome?faces-redirect=true";
         }
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Musíte vybrat zařízení"));

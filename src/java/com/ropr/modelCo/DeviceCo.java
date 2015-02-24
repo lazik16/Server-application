@@ -7,6 +7,7 @@ package com.ropr.modelCo;
 
 import com.google.gson.annotations.Expose;
 import com.ropr.model.Device;
+import com.ropr.model.Phonenumber;
 
 /**
  *
@@ -15,6 +16,16 @@ import com.ropr.model.Device;
 public class DeviceCo<T> {
     @Expose
     private String phone;
+    private Phonenumber realNumber;
+
+    public Phonenumber getRealNumber() {
+        return realNumber;
+    }
+
+    public void setRealNumber(Phonenumber realNumber) {
+        this.realNumber = realNumber;
+    }
+    
 
     public DeviceCo(Device d) {
         phone = d.getPhonenumberId().getNumber();
@@ -31,6 +42,8 @@ public class DeviceCo<T> {
     public void setPhonenumberId(String phonenumberId) {
         this.phone = phonenumberId;
     }
+    
+    
     
     
 }

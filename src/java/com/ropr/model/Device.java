@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.ropr.modelCo.DeviceCo;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -39,7 +40,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Device.findAll", query = "SELECT d FROM Device d"),
-    @NamedQuery(name = "Device.findByPhone", query = "SELECT d FROM Device d WHERE d.phonenumberId = :phonenumberId"),
+    @NamedQuery(name = "Device.findByPhone", query = "SELECT d FROM Device d WHERE d.phonenumberId.number = :number"),
     @NamedQuery(name = "Device.findByIdDevice", query = "SELECT d FROM Device d WHERE d.idDevice = :idDevice")})
 public class Device implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "toDevice")
@@ -56,7 +57,7 @@ public class Device implements Serializable {
         @JoinColumn(name = "user", referencedColumnName = "idUser")})
     @ManyToMany(fetch = FetchType.EAGER)
     private List<User> userList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceid", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "deviceid", fetch = FetchType.EAGER)
     private List<Contact> contactList;
     @JoinColumn(name = "Phonenumber_Id", referencedColumnName = "idPhone")
     @ManyToOne(optional = false)
@@ -65,6 +66,10 @@ public class Device implements Serializable {
     private Phonenumber phonenumberId;
 
     public Device() {
+    }
+    
+    public Device(DeviceCo dev) {
+        this.setPhonenumberId(dev.getRealNumber());
     }
 
     public Device(Integer idDevice) {

@@ -6,6 +6,7 @@
 package com.ropr.ejb;
 
 import com.ropr.model.Device;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.websocket.Session;
@@ -15,11 +16,11 @@ public class Detector {
     private List<DeviceStatus> onlineDevices;
 
     public Detector() {
-        this.onlineDevices = new CopyOnWriteArrayList<DeviceStatus>();
+        this.onlineDevices = new CopyOnWriteArrayList<>();
     }
 
     public List<DeviceStatus> getOnlineDevices() {
-        return onlineDevices;
+        return Collections.unmodifiableList(onlineDevices);
     }
 
     public void setOnlineDevices(List<DeviceStatus> onlineDevices) {
@@ -32,12 +33,12 @@ public class Detector {
     }
     
     public void setOffline(Session s){
-        for (DeviceStatus deviceStatus : onlineDevices) {
-            if(deviceStatus.getSession().equals(s)){
-               onlineDevices.remove(deviceStatus);
-               System.out.println(deviceStatus+" has logged out.");
-            }
-        }
+        onlineDevices.stream().filter((deviceStatus) -> (deviceStatus.getSession().equals(s))).map((deviceStatus) -> {
+            onlineDevices.remove(deviceStatus);
+            return deviceStatus;
+        }).forEach((deviceStatus) -> {
+            System.out.println(deviceStatus+" has logged out.");
+        });
     }
     
     public DeviceStatus getByDevice(Device device){
@@ -68,19 +69,10 @@ public class Detector {
     }
     
     public Boolean isOnline(DeviceStatus ds){
-        for (DeviceStatus deviceStatus : onlineDevices) {
-            if(deviceStatus.getDevice().equals(ds.getDevice()) && ds.getSession().equals(deviceStatus.getSession()))
-              return true;
-        }
-        return false;
+        return onlineDevices.stream().anyMatch((deviceStatus) -> (deviceStatus.getDevice().equals(ds.getDevice()) && ds.getSession().equals(deviceStatus.getSession())));
     }
     
     public Boolean isAuth(Session s){
-        for (DeviceStatus ds : onlineDevices) {
-            if(ds.getSession().equals(s)){
-                return true;
-            }
-        }
-        return false;
+        return onlineDevices.stream().anyMatch((ds) -> (ds.getSession().equals(s)));
     }
 }

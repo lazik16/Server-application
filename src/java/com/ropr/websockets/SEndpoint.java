@@ -1,6 +1,8 @@
 package com.ropr.websockets;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
+import com.google.gson.reflect.TypeToken;
 import com.ropr.ejb.Detector;
 import com.ropr.ejb.DeviceStatus;
 import com.ropr.model.Contact;
@@ -9,12 +11,8 @@ import com.ropr.model.DeviceFacadeLocal;
 import com.ropr.model.Device;
 import com.ropr.model.Message;
 import com.ropr.model.Phonenumber;
-import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.enterprise.concurrent.ManagedExecutorService;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceUnit;
 import javax.websocket.CloseReason;
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
@@ -23,120 +21,223 @@ import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 import com.ropr.model.MessageFacadeLocal;
 import com.ropr.model.PhonenumberFacadeLocal;
+import com.ropr.modelCo.ContactCo;
+import com.ropr.modelCo.DeviceCo;
+import com.ropr.modelCo.JSONBroker;
+import com.ropr.modelCo.MessageCo;
+import com.ropr.modelCo.MsgPack;
 import com.ropr.sync.Daemon;
+import com.ropr.sync.ResponseObject;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @ServerEndpoint("/anth")
 @Stateless
 public class SEndpoint {
 
-    private final int ASC = 0;
-    private final int DESC = 1;
-
     public static List<Session> authSessions = new ArrayList<>();
     public static Detector detector = new Detector();
-
-    @Resource
-    ManagedExecutorService mes;
-
     public static String address = "apsync.duckdns.org";
 
     @EJB
-    private ContactFacadeLocal contactDao;
+    private ContactFacadeLocal contactFacade;
     @EJB
-    private MessageFacadeLocal messageDao;
+    private MessageFacadeLocal messageFacade;
     @EJB
-    private DeviceFacadeLocal deviceDao;
+    private DeviceFacadeLocal deviceFacade;
     @EJB
-    private PhonenumberFacadeLocal phoneDao;
+    private PhonenumberFacadeLocal phoneFacade;
     @EJB
     private Daemon daemon;
 
-    @PersistenceUnit
-    EntityManagerFactory enf;
-
     @OnMessage
     public String receiveMessage(String message, Session session) {
-        //////////////////PUBLIC SECTION//////////////////
-        if (message.matches("logoutDevice[(][)]")) {
-            return logoutDevice(session);
+        System.out.println("CU: " + message);
+        
+        ResponseObject response = new ResponseObject();
+        if(daemon.handleReply(message)){
+            return "";
+        } else if (message.matches("logoutDevice[(][)]")) {
+            response = generateResponse(logoutDevice(session), ResponseType.ACK);
         } else if (message.matches("loginDevice[(][+]\\d*\\s\\d*\\s\\d*\\s\\d*[)]")) {
             message = message.substring(12, message.length() - 1);
-            return loginDevice(message, session);
-        }
-
-        ////////////////AUTHORIZED SECTION//////////////////
-        if (!detector.isAuth(session)) {
-            return "You are not prepared!";
-        }
-        
-        else if (message.matches("rsync")){
+            response = loginDevice(message, session);
+        } else if (message.length() > 14 && message.substring(0, 14).matches("registerDevice")) {
+            Device currentDevice = detector.getDeviceBySession(session);
+            response = initializeDeviceCreation(message.substring(14, message.length()), currentDevice);
+        } else if (!detector.isAuth(session)) {
+            response = generateResponse("You are not logged in.", ResponseType.ERR);
+        } else if (message.matches("rsync")) {
             daemon.synchronize(detector.getBySession(session));
-            return "Synchronized";
-        }
+            response = generateResponse("Synchronized", ResponseType.ACK);
+        }else
+        response = recognize(message, new JSONBroker(), session);
         
-        else if(message.matches("rep*")){
-            daemon.handleReply(message);
-        } 
-        
-        else if (message.matches("devMessages[(][)]")) {
-            return getMessages(session);
-        } 
-        
-        else if (message.matches("devMessages[(][+]\\d*\\s\\d*\\s\\d*\\s\\d*[)]")) {
-            message = message.substring(12, message.length() - 1);
-            return getMessages(message, session);
-        }
-
-        return addMessage(message);
+        return new JSONBroker().responseToJSon(response);
     }
-    
-    public String addMessage(String message){
-        Message back;
-        try {
-            back = Message.fromJSON(message);
-        } catch (JsonParseException ex) {
-            return "Bad JSON syntax";
-        }
-        Contact scapegoat = contactDao.findByPhone(back.getContactidContact().getPhonenumberid());
-        if (scapegoat != null) {
-            back.setContactidContact(scapegoat);
-            messageDao.create(back);
+
+    public ResponseObject processMessage(MsgPack<MessageCo> mes, Device s) {
+        String contactNumber;
+        if (s.getPhonenumberId().getNumber().equals(mes.getObject().getReciever())) {
+            contactNumber = mes.getObject().getSender();
         } else {
-            return "Contact not found!";
+            contactNumber = mes.getObject().getReciever();
         }
-        return "Message to contact " + back.getContactidContact().getNick() + " added.";
-    }
-    
+        Contact currentContact = contactFacade.findByPhone(contactNumber, s);
+        mes.getObject().setContact(currentContact);
 
-    public static String getMessages(Session s) {
-        sendAsync(s, "Transmission initialized.");
-        Device currDev = detector.getDeviceBySession(s);
+        if (currentContact != null) {
+            switch (mes.getAction()) {
+                case NEW:
+                    return generateResponse(messageFacade.createCo(mes.getObject()), ResponseType.ACK);
 
-        for (Contact c : currDev.getContactList()) {
-            String cToSend = c.toJSON();
-            sendAsync(s, cToSend);
-            for (Message m : c.getMessageList()) {
-                String mToSend = m.toJSON();
-                sendAsync(s, mToSend);
+                case DEL:
+                    return generateResponse(messageFacade.removeCo(mes.getObject()), ResponseType.ACK);
+
+                case REP:
+                    return generateResponse(messageFacade.editCo(mes.getObject()), ResponseType.ACK);
             }
         }
-        return "Transmission complete.";
+        return generateResponse("Contact not found", ResponseType.ERR);
     }
 
-    public static String getMessages(String message, Session s) {
-        sendAsync(s, "Transmission initialized.");
-        Device currDev = detector.getDeviceBySession(s);
-        for (Contact c : currDev.getContactList()) {
-            if (c.getPhonenumberid().getNumber().equals(message)) {
-                for (Message m : c.getMessageList()) {
-                    sendAsync(s, m.toJSON());
+    public static enum ResponseType {
+
+        ERR, ACK, INFO
+    }
+
+    public ResponseObject processContact(MsgPack<ContactCo> mes, Device s) {
+        Phonenumber p = phoneFacade.findByNumber(mes.getObject().getPhonenumberid());
+        if (p == null) {
+            p = new Phonenumber();
+            p.setNumber(mes.getObject().getPhonenumberid());
+            phoneFacade.create(p);
+            p = phoneFacade.findByNumber(mes.getObject().getPhonenumberid());
+        }
+        mes.getObject().setRealNumber(p);
+        mes.getObject().setDevice(s);
+        Contact currentContact;
+
+        switch (mes.getAction()) {
+            case NEW:
+                currentContact = contactFacade.findByPhone(mes.getObject().getPhonenumberid(), s);
+                if (currentContact != null && currentContact.getDeviceid().equals(s)) {
+                    return generateResponse("Contact already exists", ResponseType.ERR);
                 }
-            }
+                return generateResponse(contactFacade.createCo(mes.getObject()), ResponseType.ACK);
+            case DEL:
+                currentContact = contactFacade.findByPhone(mes.getObject().getPhonenumberid(), s);
+                if (currentContact == null) {
+                    return generateResponse("Contact does not exist", ResponseType.ERR);
+                }
+                eraseContactMessages(currentContact);
+                contactFacade.remove(currentContact);
+                return generateResponse("Contact removed", ResponseType.ACK);
+            case REP:
+                return generateResponse(contactFacade.editCo(mes.getObject()), ResponseType.ACK);
         }
-        return "Transmission complete.";
+        return generateResponse("No such contact found", ResponseType.ERR);
+    }
+
+    private void eraseContactMessages(Contact contact) {
+        List<Message> tyList = new ArrayList<>();
+        Collections.copy(contact.getMessageList(), tyList);
+        for (Message m : tyList) {
+            messageFacade.remove(m);
+        }
+    }
+
+    public ResponseObject processDevice(MsgPack<DeviceCo> mes, Device s) {
+        Device dev = deviceFacade.findByPhone(mes.getObject().getPhonenumberId());
+        Phonenumber p = new Phonenumber();
+        p.setNumber(mes.getObject().getPhonenumberId());
+        phoneFacade.create(p);
+        p = phoneFacade.findByNumber(mes.getObject().getPhonenumberId());
+        mes.getObject().setRealNumber(p);
+
+        switch (mes.getAction()) {
+            case NEW:
+                if (dev != null) {
+                    return generateResponse("Device already exists", ResponseType.ERR);
+                }
+                return generateResponse(deviceFacade.createCo(mes.getObject()), ResponseType.ACK);
+            case DEL:
+                if (dev == null) {
+                    return generateResponse("Device does not exists", ResponseType.ERR);
+
+                }
+                return generateResponse(deviceFacade.removeCo(mes.getObject()), ResponseType.ACK);
+            case REP:
+                return generateResponse(deviceFacade.editCo(mes.getObject()), ResponseType.ACK);
+        }
+        return generateResponse("No such device found", ResponseType.ERR);
+    }
+
+    private ResponseObject generateResponse(String text, ResponseType resp) {
+        ResponseObject t = new ResponseObject();
+        t.setResponseType(resp);
+        t.setText(text);
+        return t;
+    }
+
+    public ResponseObject recognize(String encodedMessage, JSONBroker broker, Session s) {
+        MsgPack extractedPack = null;
+        try {
+            extractedPack = broker.extractMessage(encodedMessage);
+        } catch (JsonParseException ex) {
+            ex.printStackTrace();
+        }
+        Device currentDevice = detector.getDeviceBySession(s);
+        ResponseObject response;
+        switch (extractedPack.getObjectType()) {
+            case DEV:
+                response = generateResponse("Not implemented like that", ResponseType.ERR);
+                break;
+            case MES:
+                response = initializeMessageCreation(encodedMessage, currentDevice);
+                break;
+            case CON:
+                response = initializeContactCreation(encodedMessage, currentDevice);
+                break;
+            default:
+                response = generateResponse("Type is not correct or not implemented", ResponseType.ERR);
+        }
+        response.setHash(extractedPack.getHash());
+        return response;
+    }
+
+    private ResponseObject initializeContactCreation(String encodedMessage, Device currentDevice) {
+        Type collectionType;
+        Gson gson = new Gson();
+        collectionType = new TypeToken<MsgPack<ContactCo>>() {
+        }.getType();
+        MsgPack<ContactCo> extractedPackC = gson.fromJson(encodedMessage, collectionType);
+        return processContact(extractedPackC, currentDevice);
+    }
+
+    private ResponseObject initializeMessageCreation(String encodedMessage, Device currentDevice) {
+        Type collectionType;
+        Gson gson = new Gson();
+        collectionType = new TypeToken<MsgPack<MessageCo>>() {
+        }.getType();
+        MsgPack<MessageCo> extractedPackM = gson.fromJson(encodedMessage, collectionType);
+        return processMessage(extractedPackM, currentDevice);
+    }
+
+    private ResponseObject initializeDeviceCreation(String encodedMessage, Device currentDevice) {
+        Type collectionType;
+        Gson gson = new Gson();
+        collectionType = new TypeToken<MsgPack<DeviceCo>>() {
+        }.getType();
+        MsgPack<DeviceCo> extractedPackD = gson.fromJson(encodedMessage, collectionType);
+
+        if (deviceFacade.findByPhone(extractedPackD.getObject().getPhonenumberId()) != null) {
+            return generateResponse("Device already exists", ResponseType.ERR);
+        }
+        return processDevice(extractedPackD, currentDevice);
     }
 
     private String logoutDevice(Session session) {
@@ -155,20 +256,18 @@ public class SEndpoint {
         System.out.println("Closing:" + session.getId() + " reason: " + c.getReasonPhrase());
     }
 
-    private String loginDevice(String message, Session session) {
-        System.out.println(message);
-        Phonenumber ph = phoneDao.findByNumber(message);
+    private ResponseObject loginDevice(String message, Session session) {
+        Phonenumber ph = phoneFacade.findByNumber(message);
         if (ph == null) {
-            return "No such device registered";
+            return generateResponse("No such device registered", ResponseType.ERR);
         }
-        Device d = deviceDao.findByPhone(ph);
-
+        Device d = deviceFacade.findByPhone(ph.getNumber());
         DeviceStatus ds = new DeviceStatus(d, session);
         if (!detector.isOnline(ds)) {
             detector.setOnline(ds);
-            return "Logged in";
+            return generateResponse("Logged in", ResponseType.ACK);
         } else {
-            return "Already logged in";
+            return generateResponse("Already logged in", ResponseType.ERR);
         }
     }
 

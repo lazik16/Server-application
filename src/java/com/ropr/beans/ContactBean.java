@@ -27,19 +27,17 @@ import javax.faces.context.FacesContext;
 @ManagedBean(name = "contact")
 @ViewScoped
 public class ContactBean implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private String text;
     private Contact selectedContact;
     private List<Message> messageList;
     private final FacesContext facesContext = FacesContext.getCurrentInstance();
     
-
     @EJB
-    ContactFacadeLocal contactDao;
+    private MessageFacadeLocal messageDao;
     @EJB
-    MessageFacadeLocal messageDao;
-    @EJB
-    Daemon daemon;
+    private Daemon daemon;
 
     public List<Message> getMessageList() {
         return messageList;
@@ -70,7 +68,8 @@ public class ContactBean implements Serializable {
 
     public String getRealReceiver(Message m) {
         if (m != null) {
-            if (m.getReciever().equals(m.getContactidContact().getPhonenumberid().getNumber())) {
+            if (m.getReciever().equals(
+                    m.getContactidContact().getPhonenumberid().getNumber())) {
                 return m.getContactidContact().getNick();
             } else {
                 return "Vás";
@@ -93,27 +92,17 @@ public class ContactBean implements Serializable {
 
     public void update() {
         if (selectedContact != null) {
-            this.messageList = contactDao.findByPhone(selectedContact.getPhonenumberid()).getMessageList();
+            this.messageList = selectedContact.getMessageList();
         }
-        this.messageList = messageList.subList(0, messageList.size() / 2);
     }
 
     public void send() {
-        //Message m = new Message();
-
         if (selectedContact == null) {
             facesContext.addMessage(null, new FacesMessage("Vyberte kontakt, kterému chcete psát."));
         }
         if (text != null && text.equals("")) {
             facesContext.addMessage(null, new FacesMessage("Nic jste nenapsal/a."));
         }
-        /*
-        m.setText(text);
-        m.setContactidContact(selectedContact);
-        m.setSender(selectedContact.getDeviceid().getPhonenumberId().getNumber());
-        m.setReciever(selectedContact.getPhonenumberid().getNumber());
-        m.setSendTime(new Date());
-        */
         if (messageList == null) {
             messageList = new ArrayList<>();
         }

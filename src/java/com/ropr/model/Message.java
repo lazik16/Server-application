@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.ropr.modelCo.MessageCo;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -84,6 +85,14 @@ public class Message implements Serializable {
     private Contact contactidContact;
 
     public Message() {
+    }
+    
+    public Message(MessageCo mes) {
+        this.setReciever(mes.getReciever());
+        this.setSender(mes.getSender());
+        this.setSendTime(mes.getSendTime());
+        this.setText(mes.getText());
+        this.setContactidContact(mes.getContact());
     }
 
     public Message(Integer idMessage) {

@@ -5,6 +5,7 @@
  */
 package com.ropr.model;
 
+import com.ropr.modelCo.MessageCo;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -31,4 +32,25 @@ public class MessageFacade extends AbstractFacade<Message> implements MessageFac
     public void create(Message entity) {
         super.create(entity); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public String createCo(MessageCo message) {
+        Message mes = new Message(message);
+        create(mes);
+        return "Message created";
+    }
+
+    @Override
+    public String editCo(MessageCo message) {
+        
+       return "Not implemented";
+    }
+
+    @Override
+    public String removeCo(MessageCo message) {
+        
+        
+        return "Not implemented";
+    }
+
 }

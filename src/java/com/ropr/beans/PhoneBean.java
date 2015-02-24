@@ -22,29 +22,9 @@ import javax.faces.context.FacesContext;
 @ViewScoped
 public class PhoneBean {
     private int number;
-
-    @EJB
-    PhonenumberFacadeLocal  phoneDao;
-    @EJB
-    DeviceFacadeLocal  deviceDao;
-    @EJB
-    UserFacadeLocal  userDao;
-
     
     public String assignNumber(String email){
-        FacesContext fc = FacesContext.getCurrentInstance();
-        /*
-        User user = userDao.findByEmail(email);
-        Device dev = deviceDao.getDeviceByNumber(number);
-        //Phonenumber phone = phoneDao.getPhonenumber(number) ;
-        
-        if(dev==null)
-            fc.addMessage(null, new FacesMessage("fail(Zařízení s tímto číslem není připojeno do naší sítě)"));
-        else{
-            userDao.addDevice(dev,user);
-            ///SYNCHRONIZE///
-            return "/restricted/viewAccount?faces-redirect=true";  
-        }*/
+        FacesContext.getCurrentInstance();
         return "/restricted/viewAccount?faces-redirect=false"; 
     }
 

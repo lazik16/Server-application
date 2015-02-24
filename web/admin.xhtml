@@ -30,15 +30,13 @@
                                     <f:facet name="header">
                                         Připojená zařízení
                                     </f:facet>
-                                    <p:ajax event="rowSelect" listener="#{admin.onMessageSent}" update=":form:msgs" />
                                     <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
                                     <p:column headerText="Zařízení">
                                         <h:outputText value="#{dev.device.phonenumberId.number}" />
                                     </p:column>
                                     <p:column headerText="Session">
                                         <h:outputText value="#{dev.session}" />
-                                    </p:column>
-                                    
+                                    </p:column>   
                                 </p:dataTable>
 
                                 <p:poll interval="3" update="devTable" />
@@ -47,6 +45,7 @@
                                 <p:row>
                                     <p:inputText id="inputBox" value="#{admin.textToSend}" />
                                     <p:commandButton id="sendBtn" value="Send" action="#{admin.sendToDevice(dev.session)}" ajax="true"/>
+                                    <p:commandButton id="killBtn" value="Kill" action="#{admin.killDevice(dev.session)}"/>
                                 </p:row>
                             </p:growl>
                         </h:form>

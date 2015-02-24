@@ -5,6 +5,7 @@
  */
 package com.ropr.model;
 
+import com.ropr.modelCo.DeviceCo;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -20,15 +21,13 @@ public interface DeviceFacadeLocal {
     void edit(Device device);
 
     void remove(Device device);
-
-    Device find(Object id);
-
-    List<Device> findAll();
-
-    List<Device> findRange(int[] range);
-
-    int count();
     
-    Device findByPhone(Phonenumber number);
+    String createCo(DeviceCo device);
+
+    String editCo(DeviceCo device);
+
+    String removeCo(DeviceCo device);
+
+    Device findByPhone(String number);
     
 }

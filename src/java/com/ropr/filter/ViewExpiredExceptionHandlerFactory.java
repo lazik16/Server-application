@@ -4,7 +4,7 @@ import javax.faces.context.ExceptionHandler;
 import javax.faces.context.ExceptionHandlerFactory;
  
 public class ViewExpiredExceptionHandlerFactory extends ExceptionHandlerFactory {
-    private ExceptionHandlerFactory factory;
+    private final ExceptionHandlerFactory factory;
  
     public ViewExpiredExceptionHandlerFactory(ExceptionHandlerFactory factory) {
         this.factory = factory;

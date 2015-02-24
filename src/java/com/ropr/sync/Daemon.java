@@ -9,17 +9,20 @@ import com.ropr.ejb.DeviceStatus;
 import com.ropr.model.Contact;
 import com.ropr.model.Device;
 import com.ropr.model.Message;
+import com.ropr.model.Phonenumber;
 import com.ropr.model.Syncpoint;
 import com.ropr.model.SyncpointFacadeLocal;
+import com.ropr.modelCo.ContactCo;
+import com.ropr.modelCo.JSONBroker;
+import com.ropr.modelCo.MessageCo;
+import com.ropr.modelCo.MsgPack;
 import com.ropr.websockets.SEndpoint;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.enterprise.concurrent.ManagedExecutorService;
 import javax.faces.bean.ManagedBean;
 import javax.websocket.Session;
 
@@ -30,14 +33,12 @@ import javax.websocket.Session;
 @ManagedBean(name = "daemon")
 @Stateless
 public class Daemon implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @EJB
     private SyncpointFacadeLocal syncDao;
 
-    @Resource
-    ManagedExecutorService mes;
-
-    private static final List confirmationList = new CopyOnWriteArrayList<>();
+    private static final List<MsgPack> confirmationList = new CopyOnWriteArrayList<>();
 
     //Message from web/desktop user to send via mobile;
     public Message sendMessage(String text, Contact to) {
@@ -47,30 +48,51 @@ public class Daemon implements Serializable {
         m.setSender(to.getDeviceid().getPhonenumberId().getNumber());
         m.setReciever(to.getPhonenumberid().getNumber());
         m.setSendTime(new Date());
-
+        
         trySendMessage(m, to.getDeviceid());
         return m;
     }
 
-    //1. get to JSON
-    //2. look for device
-    //3. send if online
-    //4. add for synchronization if not
+    public Contact sendContact(String email, String name, String surname, String nickname, Phonenumber number, Device selectedDevice) {
+        Contact c = new Contact();
+        c.setEmail(email);
+        c.setFirstName(name);
+        c.setLastName(surname);
+        c.setNick(nickname);
+        c.setDeviceid(selectedDevice);
+        c.setPhonenumberid(number);
+
+        trySendContact(c);
+        return c;
+    }
+
     private void trySendMessage(Message m, Device to) {
-        //Phonenumber toPhone = phoneDao.findByNumber(m.getSender());
-        //Device to = deviceDao.findByPhone(toPhone);
+        System.out.println("Constructing JSON message syntax");
+        String jsonToSend;
+        JSONBroker broker = new JSONBroker();
+        MsgPack<MessageCo> pack = broker.createMessagePack(MsgPack.ObjectType.MES, new MessageCo(m), MsgPack.ActionType.NEW);
+        jsonToSend = broker.messageToJson(pack);
+        commitTransmission(pack, to, jsonToSend);
+    }
 
-        //Need to create propper JSON form, DO NOT FORGET
-        String jsonToSend = m.toJSON();
-
+    private void commitTransmission(MsgPack pack, Device to, String jsonToSend) {
         DeviceStatus ds = SEndpoint.detector.getByDevice(to);
         if (ds == null) {
-            System.out.println("Not online");
+            System.out.println("Not online, storing");
             addToSyncpoint(to, jsonToSend);
         } else {
-            System.out.println("Device is online");
+            System.out.println("Device is online, sending now");
             sendMessage2Client(ds.getSession(), jsonToSend);
+            confirmationList.add(pack);
         }
+    }
+
+    private void trySendContact(Contact c) {
+        System.out.println("Constructing JSON contact syntax");
+        JSONBroker broker = new JSONBroker();
+        MsgPack<ContactCo> pack = broker.createContactPack(MsgPack.ObjectType.CON, new ContactCo(c), MsgPack.ActionType.NEW);
+        String jsonToSend = broker.messageToJson(pack);
+        commitTransmission(pack, c.getDeviceid(), jsonToSend);
     }
 
     /* This method creates new synchronization point based on device and JSON message */
@@ -95,10 +117,12 @@ public class Daemon implements Serializable {
 
         syncList = syncDao.findByDevice(des.getDevice());
         System.out.println("Found device for syncing");
-        for (Syncpoint syncpoint : syncList) {
+        syncList.stream().map((syncpoint) -> {
             sendMessage2Client(des.getSession(), syncpoint.getMessage());
+            return syncpoint;
+        }).forEach((syncpoint) -> {
             syncDao.remove(syncpoint);
-        }
+        });
     }
 
     /* Sends the message and add it to confirm list, plain and simple */
@@ -108,11 +132,23 @@ public class Daemon implements Serializable {
     }
 
     /* Handles the replys from remote devices concerning synchronization points */
-    public static void handleReply(String message) {
+    public Boolean handleReply(String message) {
         //1. parse it through
-        String hashCode = "..";
+        ResponseObject response = null;
+        try{
+        response = new JSONBroker().extractResponse(message);
+        }catch(Exception ex){
+            System.out.println("Not a response, passing on to next.");
+            return false;
+        }
         //2. verify if hash is in confirm list
-
-        //3. remove message from confirmList and then from syncpoint database
+        System.out.println("Looking for match.");
+        for (MsgPack cfp : confirmationList) {
+            if(cfp.getHash()==response.getHash()){
+                confirmationList.remove(cfp);
+                System.out.println("Match found, message received.");
+            }
+        }
+        return true;
     }
 }

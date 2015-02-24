@@ -6,7 +6,6 @@
 package com.ropr.json;
 
 import com.google.gson.Gson;
-import com.ropr.model.User;
 
 /**
  *

@@ -25,10 +25,10 @@ public class DeviceBean implements Serializable {
     private List<Contact> contactList;
 
     public List<Contact> getContactList() {
-        return contactList;
+        return (contactList);
     }
     @EJB
-    DeviceFacadeLocal deviceDao;
+    private DeviceFacadeLocal deviceDao;
 
     public void setContactList(List<Contact> contactList) {
         this.contactList = contactList;
@@ -43,7 +43,9 @@ public class DeviceBean implements Serializable {
     }
     
     public void update(){
-        if(selectedDevice!=null)
-        this.contactList = deviceDao.findByPhone(selectedDevice.getPhonenumberId()).getContactList();
-    } 
+        if(selectedDevice!=null) {
+            this.contactList = deviceDao.findByPhone(
+                    selectedDevice.getPhonenumberId().getNumber()).getContactList();
+        }
+    }
 }

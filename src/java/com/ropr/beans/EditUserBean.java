@@ -24,7 +24,7 @@ import javax.faces.context.FacesContext;
 @ManagedBean(name = "editUser")
 @ViewScoped
 public class EditUserBean implements Serializable{
-    private User user;
+    final private User user;
     private String emailA,emailB,passA,passB,name,surname;
     
     public EditUserBean() {
@@ -85,9 +85,9 @@ public class EditUserBean implements Serializable{
     }
     
     @EJB
-    UserFacadeLocal userDao;
+    private UserFacadeLocal userDao;
     @EJB
-    DeviceFacadeLocal deviceDao;
+    private DeviceFacadeLocal deviceDao;
     
     public String editUser(){
         user.setEmail(emailA);

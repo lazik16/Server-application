@@ -5,6 +5,7 @@
  */
 package com.ropr.model;
 
+import com.ropr.modelCo.MessageCo;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -20,7 +21,14 @@ public interface MessageFacadeLocal {
     void edit(Message message);
 
     void remove(Message message);
+    
+    String createCo(MessageCo message);
 
+    String editCo(MessageCo message);
+
+    String removeCo(MessageCo message);
+
+    /*
     Message find(Object id);
 
     List<Message> findAll();
@@ -28,5 +36,5 @@ public interface MessageFacadeLocal {
     List<Message> findRange(int[] range);
 
     int count();
-    
+    */
 }
